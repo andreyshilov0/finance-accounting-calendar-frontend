@@ -1,0 +1,7 @@
+{
+  "userLoginLabel": " Login or e-mail",
+  "userPasswordLabel": " Password",
+  "buttonLogin": "Log-in",
+  "anErrorOccurred": "An error occurred, please try again later",
+  "noValidEmailOrPassword": "No valid Email or Password"
+}

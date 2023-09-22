@@ -1,0 +1,7 @@
+{
+  "userLoginLabel": "Имя пользователя или e-mail",
+  "userPasswordLabel": "Пароль",
+  "buttonLogin": "Войти",
+  "anErrorOccurred": "Произошла ошибка, повторите позже",
+  "noValidEmailOrPassword": "Не правильный логин или пароль"
+}

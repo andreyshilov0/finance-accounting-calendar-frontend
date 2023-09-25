@@ -8,8 +8,8 @@ import {
   PaymentNameAutocomplete,
 } from "./styles";
 
-const predefinedPaymentNames = ["Payment Option 1"]; // Оставил для проверки
-const payments = [{ name: "Payment 1", amount: 100 }]; // Оставил для проверки
+const predefinedPaymentNames = ["Payment Option 1"]; // Оставил всё что ниже пока для проверки
+const payments = [{ name: "Payment 1", amount: 100 }];
 
 const Payments = () => {
   const [amount, setAmount] = useState("");

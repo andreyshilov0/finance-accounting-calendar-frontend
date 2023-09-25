@@ -1,9 +1,9 @@
-export type Income = {
+export interface Income {
   name: string;
   amount: number;
 };
 
-export type IncomesProps = {
+export interface IncomesProps {
   predefinedIncomeNames: string[];
   incomes: Income[];
 };

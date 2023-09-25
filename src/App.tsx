@@ -3,7 +3,7 @@ import AuthPage from "@pages/AuthPage/AuthPage";
 import MainPage from "@pages/MainPage/MainPage";
 
 const router = createBrowserRouter([
-  { path: "/login", element: <AuthPage /> },
+  { path: "/", element: <AuthPage /> },
   { path: "/main", element: <MainPage /> },
 ]);
 

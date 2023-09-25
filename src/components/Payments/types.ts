@@ -1,9 +1,9 @@
-export type Payment = {
+export interface Payment {
   name: string;
   amount: number;
 };
 
-export type PaymentsProps = {
+export interface PaymentsProps {
   predefinedPaymentNames: string[];
   payments: Payment[];
 };

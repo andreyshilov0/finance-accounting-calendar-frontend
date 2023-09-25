@@ -9,7 +9,7 @@ import {
 } from "./styles";
 
 const predefinedIncomeNames = ["Income Option 1"]; // Оставил для проверки
-const incomes = [{ name: "Income 1", amount: 100 }]; // Оставил для проверки
+const incomes = [{ name: "Income 1", amount: 100 }];
 
 const Incomes = () => {
   const [amount, setAmount] = useState("");

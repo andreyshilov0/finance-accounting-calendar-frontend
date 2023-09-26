@@ -7,27 +7,28 @@ import {
   Button,
 } from "@mui/material";
 import { DeleteCategoryDialogProps } from "./types";
-
+import { useTranslation } from "react-i18next";
 const DeleteCategoryDialog = ({
   isOpen,
   onClose,
   onDelete,
   categoryName,
 }: DeleteCategoryDialogProps) => {
+  const { t } = useTranslation("main-page");
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle>Confirm Delete</DialogTitle>
+      <DialogTitle>{t("deleteCategoryDialog.dialogTitle")}</DialogTitle>
       <DialogContent>
         <Typography>
-          Are you sure you want to delete the category "{categoryName}"?
+          {t("deleteCategoryDialog.questionTitle")} "{categoryName}"?
         </Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          {t("deleteCategoryDialog.cancelButton")}
         </Button>
         <Button onClick={onDelete} color="primary">
-          Delete
+          {t("deleteCategoryDialog.deleteButton")}
         </Button>
       </DialogActions>
     </Dialog>

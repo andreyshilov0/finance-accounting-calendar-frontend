@@ -7,6 +7,7 @@ import {
   AddButton,
   IncomeNameAutocomplete,
 } from "./styles";
+import { useTranslation } from "react-i18next";
 
 const predefinedIncomeNames = ["Income Option 1"]; // Оставил для проверки
 const incomes = [{ name: "Income 1", amount: 100 }];
@@ -18,6 +19,7 @@ const Incomes = () => {
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
   };
+  const { t } = useTranslation("main-page");
 
   return (
     <IncomesContainer>
@@ -28,7 +30,7 @@ const Incomes = () => {
           onChange={(_, newValue) => setIncomeName(newValue as string)}
           renderInput={(params) => (
             <InputField
-              label="Income Name"
+              label={t('incomes.incomeNameLabel')}
               variant="outlined"
               onChange={(e) => setIncomeName(e.target.value)}
               {...params}
@@ -36,7 +38,7 @@ const Incomes = () => {
           )}
         />
         <InputField
-          label="Amount"
+          label={t('incomes.amountLabel')}
           variant="outlined"
           fullWidth
           value={amount}
@@ -44,9 +46,9 @@ const Incomes = () => {
         />
 
         <AddButton variant="contained" color="primary">
-          Add Income
+          {t('incomes.addIncomeButton')}
         </AddButton>
-        <ListItemText primary="Previous Incomes: " />
+        <ListItemText primary={t('incomes.previousIncomesLabel')} />
         <ListContainer>
           {incomes.map((income, index) => (
             <ListItem key={index}>

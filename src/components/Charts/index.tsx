@@ -2,13 +2,14 @@ import { useState, ChangeEvent } from "react";
 import { Container, TextField, Grid, Typography } from "@mui/material";
 import { PieChart } from "react-minimal-pie-chart";
 import { Income, Payment } from "./types";
+import { useTranslation } from "react-i18next";
 
 const Charts = () => {
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().slice(0, 10)
   );
   const [incomesData, setIncomesData] = useState<Income[]>([
-    { title: "Income 1", value: 200, color: "#E38627" }, // Тоже оставил пока для примера
+    { title: "Income 1", value: 220, color: "#E38627" }, // Оставил пока для примера
     { title: "Income 2", value: 150, color: "#C13C37" },
   ]);
   const [paymentsData, setPaymentsData] = useState<Payment[]>([
@@ -20,12 +21,14 @@ const Charts = () => {
     setSelectedDate(event.target.value);
   };
 
+  const { t } = useTranslation("main-page");
+
   return (
     <Container>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
-            label="Select Date"
+            label={t("charts.selectDateLabel")}
             type="date"
             variant="outlined"
             fullWidth
@@ -39,7 +42,7 @@ const Charts = () => {
 
         <Grid item xs={12} md={6}>
           <Typography variant="h6" gutterBottom>
-            Incomes
+            {t("charts.incomesTitle")}
           </Typography>
           {incomesData.length > 0 ? (
             <PieChart
@@ -49,20 +52,17 @@ const Charts = () => {
               label={({ dataEntry }) => `${Math.round(dataEntry.percentage)}%`}
               labelStyle={{
                 fontSize: "8px",
-                fontFamily: "sans-serif",
               }}
               animate
             />
           ) : (
-            <Typography>
-              No income data available for the selected date.
-            </Typography>
+            <Typography>{t("charts.noDataMessage")}</Typography>
           )}
         </Grid>
 
         <Grid item xs={12} md={6}>
           <Typography variant="h6" gutterBottom>
-            Payments
+            {t("charts.paymentsTitle")}
           </Typography>
           {paymentsData.length > 0 ? (
             <PieChart
@@ -72,14 +72,11 @@ const Charts = () => {
               label={({ dataEntry }) => `${Math.round(dataEntry.percentage)}%`}
               labelStyle={{
                 fontSize: "8px",
-                fontFamily: "sans-serif",
               }}
               animate
             />
           ) : (
-            <Typography>
-              No payment data available for the selected date.
-            </Typography>
+            <Typography>{t("charts.noDataMessage")}</Typography>
           )}
         </Grid>
       </Grid>

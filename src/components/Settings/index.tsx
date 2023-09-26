@@ -10,7 +10,7 @@ import {
   SectionHeader,
 } from "./styles";
 import { Category } from "./types";
-
+import { useTranslation } from "react-i18next";
 import EditCategoryDialog from "@components/ButtonEditCategory";
 import DeleteCategoryDialog from "@components/ButtonDeleteCategory";
 import AddButton from "@components/ButtonAddCategory";
@@ -29,7 +29,7 @@ const Settings: React.FC = () => {
   );
   const [isAddCategoryDialogOpen, setIsAddCategoryDialogOpen] = useState(false);
 
-  const incomeCategories: Category[] = [{ id: "1", name: "Salary" }];
+  const incomeCategories: Category[] = [{ id: "1", name: "Salary" }]; // Это и ниже тоже сделал для примера и проверки
   const paymentsCategories: Category[] = [{ id: "1", name: "Rent" }];
 
   const handleEditCategory = (category: Category) => {
@@ -55,11 +55,14 @@ const Settings: React.FC = () => {
   const handleSaveCategory = () => {
     setIsAddCategoryDialogOpen(false);
   };
+  const { t } = useTranslation("main-page");
 
   return (
     <SettingsContainer>
       <SectionHeader>
-        <Typography variant="h6">Incoming Categories</Typography>
+        <Typography variant="h6">
+          {t("settings.incomingCategoriesTitle")}
+        </Typography>
         <AddButton onAdd={handleAddCategory} />
       </SectionHeader>
       <CategoryList>
@@ -74,7 +77,9 @@ const Settings: React.FC = () => {
         ))}
       </CategoryList>
       <SectionHeader>
-        <Typography variant="h6">Payments Categories</Typography>
+        <Typography variant="h6">
+          {t("settings.paymentsCategoriesTitle")}
+        </Typography>
         <AddButton onAdd={handleAddCategory} />
       </SectionHeader>
       <CategoryList>

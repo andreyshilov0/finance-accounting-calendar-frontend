@@ -1,0 +1,45 @@
+{
+  "addButton": {
+    "addButtonText": "Add new",
+    "dialogTitle": "Add Category",
+    "categoryNameLabel": "Category Name",
+    "cancelButton": "Cancel",
+    "saveButton": "Save"
+  },
+  "deleteCategoryDialog": {
+    "dialogTitle": "Confirm Delete",
+    "questionTitle": "Are you sure you want to delete the category",
+    "cancelButton": "Cancel",
+    "deleteButton": "Delete"
+  },
+  "editCategoryDialog": {
+    "dialogTitle": "Edit Category",
+    "categoryNameLabel": "Category Name",
+    "cancelButton": "Cancel",
+    "saveButton": "Save"
+  },
+  "charts": {
+    "selectDateLabel": "Select Date",
+    "incomesTitle": "Incomes",
+    "paymentsTitle": "Payments",
+    "chartsTitle":"Charts",
+    "settingsTitle":"Settings",
+    "noDataMessage": "No data available for the selected date."
+  },
+  "incomes": {
+    "incomeNameLabel": "Income Name",
+    "amountLabel": "Amount",
+    "addIncomeButton": "Add Income",
+    "previousIncomesLabel": "Previous Incomes:"
+  },
+  "payments": {
+    "paymentNameLabel": "Payment Name",
+    "amountLabel": "Amount",
+    "addPaymentButton": "Add Payment",
+    "previousPaymentsLabel": "Previous Payments:"
+  },
+  "settings": {
+    "incomingCategoriesTitle": "Incoming Categories",
+    "paymentsCategoriesTitle": "Payments Categories"
+  }
+}

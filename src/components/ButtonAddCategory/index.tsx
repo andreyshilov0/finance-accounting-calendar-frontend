@@ -8,12 +8,14 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { Add } from "@mui/icons-material";
 import { AddButtonProps } from "./types";
 
 const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const { t } = useTranslation("main-page");
 
   const handleOpenDialog = () => {
     setIsAddDialogOpen(true);
@@ -32,15 +34,15 @@ const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
   return (
     <>
       <IconButton className="AddButton" onClick={handleOpenDialog}>
-        Add new
+        {t("addButton.addButtonText")}
         <Add />
       </IconButton>
 
       <Dialog open={isAddDialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Add Category</DialogTitle>
+        <DialogTitle>{t("addButton.dialogTitle")}</DialogTitle>
         <DialogContent>
           <TextField
-            label="Category Name"
+            label={t("addButton.categoryNameLabel")}
             variant="outlined"
             fullWidth
             value={newCategoryName}
@@ -49,10 +51,10 @@ const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">
-            Cancel
+            {t("addButton.cancelButton")}
           </Button>
           <Button onClick={handleSaveCategory} color="primary">
-            Save
+            {t("addButton.saveButton")}
           </Button>
         </DialogActions>
       </Dialog>

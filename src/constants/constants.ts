@@ -8,7 +8,6 @@ export const TAB_SCREENS = [
   { label: "Income", component: Incomes },
   { label: "Charts", component: Charts },
   { label: "Settings", component: Settings },
-
 ];
 
 export const LIST_LANGUAGES = ["en", "ru"];

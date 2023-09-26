@@ -1,0 +1,45 @@
+{
+  "addButton": {
+    "addButtonText": "Добавить",
+    "dialogTitle": "Добавить категорию",
+    "categoryNameLabel": "Название категории",
+    "cancelButton": "Отмена",
+    "saveButton": "Сохранить"
+  },
+  "deleteCategoryDialog": {
+    "dialogTitle": "Подтвердить удаление",
+    "questionTitle": "Вы уверены что хотите удалить категорию",
+    "cancelButton": "Отмена",
+    "deleteButton": "Удалить"
+  },
+  "editCategoryDialog": {
+    "dialogTitle": "Редактировать категорию",
+    "categoryNameLabel": "Название категории",
+    "cancelButton": "Отмена",
+    "saveButton": "Сохранить"
+  },
+  "charts": {
+    "selectDateLabel": "Выберите дату",
+    "incomesTitle": "Доходы",
+    "paymentsTitle": "Расходы",
+    "chartsTitle":"Графики",
+    "settingsTitle":"Настройки",
+    "noDataMessage": "Нет данных для выбранной даты."
+  },
+  "incomes": {
+    "incomeNameLabel": "Название дохода",
+    "amountLabel": "Сумма",
+    "addIncomeButton": "Добавить доход",
+    "previousIncomesLabel": "Предыдущие доходы:"
+  },
+  "payments": {
+    "paymentNameLabel": "Название расхода",
+    "amountLabel": "Сумма",
+    "addPaymentButton": "Добавить расход",
+    "previousPaymentsLabel": "Предыдущие расходы:"
+  },
+  "settings": {
+    "incomingCategoriesTitle": "Категории доходов",
+    "paymentsCategoriesTitle": "Категории расходов"
+  }
+}

@@ -7,6 +7,7 @@ import {
   Button,
 } from "@mui/material";
 import { EditCategoryDialogProps } from "./types";
+import { useTranslation } from "react-i18next";
 
 const EditCategoryDialog = ({
   isOpen,
@@ -15,12 +16,13 @@ const EditCategoryDialog = ({
   categoryName,
   onCategoryNameChange,
 }: EditCategoryDialogProps) => {
+  const { t } = useTranslation("main-page");
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle>Edit Category</DialogTitle>
+      <DialogTitle>{t('editCategoryDialog.dialogTitle')}</DialogTitle>
       <DialogContent>
         <TextField
-          label="Category Name"
+          label={t('addButton.categoryNameLabel')}
           variant="outlined"
           fullWidth
           value={categoryName}
@@ -29,10 +31,10 @@ const EditCategoryDialog = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          {t('editCategoryDialog.cancelButton')}
         </Button>
         <Button onClick={onSave} color="primary">
-          Save
+          {t('editCategoryDialog.saveButton')}
         </Button>
       </DialogActions>
     </Dialog>

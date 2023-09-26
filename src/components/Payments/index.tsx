@@ -7,6 +7,7 @@ import {
   AddButton,
   PaymentNameAutocomplete,
 } from "./styles";
+import { useTranslation } from "react-i18next";
 
 const predefinedPaymentNames = ["Payment Option 1"]; // Оставил всё что ниже пока для проверки
 const payments = [{ name: "Payment 1", amount: 100 }];
@@ -18,7 +19,7 @@ const Payments = () => {
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
   };
-
+  const { t } = useTranslation("main-page");
   return (
     <PaymentsContainer>
       <ListContainer>
@@ -28,7 +29,7 @@ const Payments = () => {
           onChange={(_, newValue) => setPaymentName(newValue as string)}
           renderInput={(params) => (
             <InputField
-              label="Payment Name"
+              label={t("payments.paymentNameLabel")}
               variant="outlined"
               onChange={(e) => setPaymentName(e.target.value)}
               {...params}
@@ -36,7 +37,7 @@ const Payments = () => {
           )}
         />
         <InputField
-          label="Amount"
+          label={t("payments.amountLabel")}
           variant="outlined"
           fullWidth
           value={amount}
@@ -44,9 +45,9 @@ const Payments = () => {
         />
 
         <AddButton variant="contained" color="primary">
-          Add Payment
+          {t("payments.addPaymentButton")}
         </AddButton>
-        <ListItemText primary="Previous Payments: " />
+        <ListItemText primary={t("payments.previousPaymentsLabel")} />
         <ListContainer>
           {payments.map((payment, index) => (
             <ListItem key={index}>

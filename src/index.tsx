@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { CssBaseline } from '@mui/material';
 import { ApolloProvider } from '@apollo/client';
 import client from 'apollo/client';
+import '@utilits/i18next'
 
 
 const root = ReactDOM.createRoot(

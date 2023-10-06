@@ -1,13 +1,22 @@
-import React from 'react';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AuthPage from "@pages/AuthPage/AuthPage";
+import MainPage from "@pages/MainPage/MainPage";
+import NavBarLayout from "@pages/NavBarLayout";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
+const router = createBrowserRouter([
+  { path: "/", element: <AuthPage /> },
+  {
+    path: "/main",
+    element: (
+      <NavBarLayout>
+        <MainPage />
+      </NavBarLayout>
+    ),
+  },
+]);
 
-      </header>
-    </div>
-  );
-}
+const App = () => {
+  return <RouterProvider router={router} />;
+};
 
 export default App;

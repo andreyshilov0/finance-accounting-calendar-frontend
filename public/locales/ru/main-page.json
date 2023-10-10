@@ -3,8 +3,10 @@
     "addButtonText": "Добавить",
     "dialogTitle": "Добавить категорию",
     "categoryNameLabel": "Название категории",
+    "helperText": "Категория уже существует",
     "cancelButton": "Отмена",
-    "saveButton": "Сохранить"
+    "saveButton": "Сохранить",
+    "logoutButton": "Выйти"
   },
   "deleteCategoryDialog": {
     "dialogTitle": "Подтвердить удаление",
@@ -22,8 +24,8 @@
     "selectDateLabel": "Выберите дату",
     "incomesTitle": "Доходы",
     "paymentsTitle": "Расходы",
-    "chartsTitle":"Графики",
-    "settingsTitle":"Настройки",
+    "chartsTitle": "Графики",
+    "settingsTitle": "Настройки",
     "noDataMessage": "Нет данных для выбранной даты."
   },
   "incomes": {

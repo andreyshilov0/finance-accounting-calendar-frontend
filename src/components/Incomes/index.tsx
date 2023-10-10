@@ -24,7 +24,7 @@ const Incomes = () => {
   return (
     <IncomesContainer>
       <ListContainer>
-        <IncomeNameAutocomplete
+        {/* <IncomeNameAutocomplete
           options={predefinedIncomeNames}
           value={incomeName}
           onChange={(_, newValue) => setIncomeName(newValue as string)}
@@ -36,7 +36,7 @@ const Incomes = () => {
               {...params}
             />
           )}
-        />
+        /> */}
         <InputField
           label={t('incomes.amountLabel')}
           variant="outlined"

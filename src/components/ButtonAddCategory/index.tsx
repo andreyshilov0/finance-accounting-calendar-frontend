@@ -11,10 +11,18 @@ import {
 import { useTranslation } from "react-i18next";
 import { Add } from "@mui/icons-material";
 import { AddButtonProps } from "./types";
+import { Category } from "@components/Settings/types";
+import { useIncomeCategories } from "@components/Settings/hooks/useIncomeCategories";
+import { usePaymentCategories } from "@components/Settings/hooks/usePaymentCategories";
 
 const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const { incomeCategories } = useIncomeCategories();
+  const { paymentCategories } = usePaymentCategories();
+  const [isNameUnique, setIsNameUnique] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
   const { t } = useTranslation("main-page");
 
   const handleOpenDialog = () => {
@@ -29,6 +37,22 @@ const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
   const handleSaveCategory = () => {
     onAdd(newCategoryName);
     handleCloseDialog();
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputName = e.target.value;
+    setNewCategoryName(inputName);
+
+    const isUnique =
+      !incomeCategories.find(
+        (category: Category) => category.name === inputName
+      ) &&
+      !paymentCategories.find(
+        (category: Category) => category.name === inputName
+      );
+
+    setIsNameUnique(isUnique);
+    setIsButtonDisabled(!isUnique);
   };
 
   return (
@@ -46,14 +70,20 @@ const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
             variant="outlined"
             fullWidth
             value={newCategoryName}
-            onChange={(e) => setNewCategoryName(e.target.value)}
+            onChange={handleInputChange}
+            error={!isNameUnique}
+            helperText={!isNameUnique ? t("addButton.helperText") : ""}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">
             {t("addButton.cancelButton")}
           </Button>
-          <Button onClick={handleSaveCategory} color="primary">
+          <Button
+            onClick={handleSaveCategory}
+            color="primary"
+            disabled={isButtonDisabled}
+          >
             {t("addButton.saveButton")}
           </Button>
         </DialogActions>

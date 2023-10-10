@@ -23,7 +23,7 @@ const Payments = () => {
   return (
     <PaymentsContainer>
       <ListContainer>
-        <PaymentNameAutocomplete
+        {/* <PaymentNameAutocomplete
           options={predefinedPaymentNames}
           value={paymentName}
           onChange={(_, newValue) => setPaymentName(newValue as string)}
@@ -35,7 +35,7 @@ const Payments = () => {
               {...params}
             />
           )}
-        />
+        /> */}
         <InputField
           label={t("payments.amountLabel")}
           variant="outlined"

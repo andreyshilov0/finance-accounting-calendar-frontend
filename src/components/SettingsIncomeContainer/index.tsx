@@ -9,7 +9,7 @@ import {
   CategoryActions,
   SectionHeader,
 } from "../Settings/styles";
-import { Category } from "@components/Settings/types";
+import { ICategory } from "@components/Settings/types";
 import { useTranslation } from "react-i18next";
 import EditCategoryDialog from "@components/ButtonEditCategory";
 import DeleteCategoryDialog from "@components/ButtonDeleteCategory";
@@ -26,20 +26,20 @@ const SettingsIncomeContainer: React.FC = () => {
   const { removeIncomeCategory } = useIncomeCategoryDelete();
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState<boolean>(false);
   const [selectedIncomeCategory, setSelectedIncomeCategory] =
-    useState<Category | null>(null);
+    useState<ICategory | null>(null);
   const [newCategoryName, setNewCategoryName] = useState<string>("");
-  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
+  const [categoryToDelete, setCategoryToDelete] = useState<ICategory | null>(
     null
   );
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
     useState(false);
 
-  const handleEditCategory = async (category: Category) => {
+  const handleEditCategory = async (category: ICategory) => {
     setSelectedIncomeCategory(category);
     setIsIncomeModalOpen(true);
   };
 
-  const handleDeleteCategory = (category: Category) => {
+  const handleDeleteCategory = (category: ICategory) => {
     setCategoryToDelete(category);
     setIsDeleteConfirmationOpen(true);
   };
@@ -65,8 +65,6 @@ const SettingsIncomeContainer: React.FC = () => {
       );
       if (updatedCategory) {
         setIsIncomeModalOpen(false);
-      } else {
-        // Обработка ошибки редактирования категории ** Добавить!!!
       }
     }
   };
@@ -79,10 +77,13 @@ const SettingsIncomeContainer: React.FC = () => {
         <Typography variant="h6">
           {t("settings.incomingCategoriesTitle")}
         </Typography>
-        <AddButton onAdd={handleAddIncomeCategory} />
+        <AddButton
+          onAdd={handleAddIncomeCategory}
+          categoryType={incomeCategories || []}
+        />
       </SectionHeader>
       <CategoryList>
-        {incomeCategories?.map((category: Category) => (
+        {incomeCategories?.map((category: ICategory) => (
           <CategoryItem key={category.id}>
             <CategoryName>{category.name}</CategoryName>
             <CategoryActions>
@@ -101,7 +102,7 @@ const SettingsIncomeContainer: React.FC = () => {
         onSave={handleSaveEditCategoryIncome}
         categoryName={newCategoryName}
         onCategoryNameChange={setNewCategoryName}
-        categoryType={incomeCategories}
+        categoryType={incomeCategories || []}
       />
 
       <DeleteCategoryDialog

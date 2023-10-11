@@ -9,7 +9,7 @@ import {
   CategoryActions,
   SectionHeader,
 } from "../Settings/styles";
-import { Category } from "@components/Settings/types";
+import { ICategory } from "@components/Settings/types";
 import { useTranslation } from "react-i18next";
 import EditCategoryDialog from "@components/ButtonEditCategory";
 import DeleteCategoryDialog from "@components/ButtonDeleteCategory";
@@ -26,21 +26,21 @@ const SettingsPaymentContainer: React.FC = () => {
   const { removePaymentCategory } = usePaymentCategoryDelete();
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState<boolean>(false);
   const [selectedPaymentCategory, setSelectedPaymentCategory] =
-    useState<Category | null>(null);
+    useState<ICategory | null>(null);
   const [newCategoryName, setNewCategoryName] = useState<string>("");
-  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
+  const [categoryToDelete, setCategoryToDelete] = useState<ICategory | null>(
     null
   );
 
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
     useState(false);
 
-  const handleEditCategory = async (category: Category) => {
+  const handleEditCategory = async (category: ICategory) => {
     setSelectedPaymentCategory(category);
     setIsPaymentModalOpen(true);
   };
 
-  const handleDeleteCategory = (category: Category) => {
+  const handleDeleteCategory = (category: ICategory) => {
     setCategoryToDelete(category);
     setIsDeleteConfirmationOpen(true);
   };
@@ -66,8 +66,6 @@ const SettingsPaymentContainer: React.FC = () => {
       );
       if (updatedCategory) {
         setIsPaymentModalOpen(false);
-      } else {
-        // Обработка ошибки редактирования категории ** Добавить!!!
       }
     }
   };
@@ -80,10 +78,13 @@ const SettingsPaymentContainer: React.FC = () => {
         <Typography variant="h6">
           {t("settings.paymentsCategoriesTitle")}
         </Typography>
-        <AddButton onAdd={handleAddPaymentCategory} />
+        <AddButton
+          onAdd={handleAddPaymentCategory}
+          categoryType={paymentCategories || []}
+        />
       </SectionHeader>
       <CategoryList>
-        {paymentCategories?.map((category: Category) => (
+        {paymentCategories?.map((category: ICategory) => (
           <CategoryItem key={category.id}>
             <CategoryName>{category.name}</CategoryName>
             <CategoryActions>
@@ -101,7 +102,7 @@ const SettingsPaymentContainer: React.FC = () => {
         }}
         onSave={handleSaveEditCategoryPayment}
         categoryName={newCategoryName}
-        categoryType={paymentCategories}
+        categoryType={paymentCategories || []}
         onCategoryNameChange={setNewCategoryName}
       />
 

@@ -1,5 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { INCOME_CATEGORIES } from "./useIncomeCategories";
+import { IUseCategoryMutationCreate } from "../types";
 
 const INCOME_CATEGORY_CREATE = gql`
   mutation createIncomeCategory($name: String!) {
@@ -13,10 +14,10 @@ const INCOME_CATEGORY_CREATE = gql`
 `;
 
 export const useIncomeCategoryCreate = () => {
-  const [createIncomeCategory, { loading, error, data }] = useMutation(
-    INCOME_CATEGORY_CREATE,
-    { refetchQueries: [{ query: INCOME_CATEGORIES }] }
-  );
+  const [createIncomeCategory, { loading, error, data }] =
+    useMutation<IUseCategoryMutationCreate>(INCOME_CATEGORY_CREATE, {
+      refetchQueries: [{ query: INCOME_CATEGORIES }],
+    });
 
   const addIncomeCategoryByName = (name: string) => {
     createIncomeCategory({

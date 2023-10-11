@@ -1,4 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
+import { INCOME_CATEGORIES } from "./useIncomeCategories";
+import { IUseCategoryMutationEdit } from "../types";
 
 const UPDATE_INCOME_CATEGORY_NAME = gql`
   mutation updateIncomeCategoryName($categoryId: ID!, $newName: String!) {
@@ -14,9 +16,10 @@ const UPDATE_INCOME_CATEGORY_NAME = gql`
 `;
 
 export const useIncomeCategoryEdit = () => {
-  const [updateIncomeCategoryName, { loading, error, data }] = useMutation(
-    UPDATE_INCOME_CATEGORY_NAME
-  );
+  const [updateIncomeCategoryName, { loading, error, data }] =
+    useMutation<IUseCategoryMutationEdit>(UPDATE_INCOME_CATEGORY_NAME, {
+      refetchQueries: [{ query: INCOME_CATEGORIES }],
+    });
 
   const editIncomeCategoryName = async (
     categoryId: number,

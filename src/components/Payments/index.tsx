@@ -8,34 +8,56 @@ import {
   PaymentNameAutocomplete,
 } from "./styles";
 import { useTranslation } from "react-i18next";
-
-const predefinedPaymentNames = ["Payment Option 1"]; // Оставил всё что ниже пока для проверки
-const payments = [{ name: "Payment 1", amount: 100 }];
+import { usePaymentCategories } from "@components/Settings/hooks/usePaymentCategories";
+import { useCreatePayment } from "./hooks/usePaymentCreate";
+import { usePaymentList } from "./hooks/usePaymentsList";
 
 const Payments = () => {
   const [amount, setAmount] = useState("");
-  const [paymentName, setPaymentName] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const { paymentCategories } = usePaymentCategories();
+  const { paymentList } = usePaymentList();
+  const { addPayment } = useCreatePayment();
+  const { t } = useTranslation("main-page");
+  console.log(paymentList)
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
   };
-  const { t } = useTranslation("main-page");
+
+  const handleCategoryChange = (event: any, value: any) => {
+    setSelectedCategory(value);
+  };
+
+  const handleAddPayment = () => {
+    if (selectedCategory && amount) {
+      const categoryId = parseInt(selectedCategory.id, 10);
+
+      addPayment(parseFloat(amount), selectedCategory.name, categoryId);
+
+      setAmount("");
+      setSelectedCategory(null);
+    }
+  };
   return (
     <PaymentsContainer>
       <ListContainer>
-        {/* <PaymentNameAutocomplete
-          options={predefinedPaymentNames}
-          value={paymentName}
-          onChange={(_, newValue) => setPaymentName(newValue as string)}
+        <PaymentNameAutocomplete
+          options={paymentCategories || []}
+          getOptionLabel={(option) => option.name}
+          value={selectedCategory}
+          onChange={handleCategoryChange}
           renderInput={(params) => (
             <InputField
               label={t("payments.paymentNameLabel")}
               variant="outlined"
-              onChange={(e) => setPaymentName(e.target.value)}
               {...params}
             />
           )}
-        /> */}
+        />
         <InputField
           label={t("payments.amountLabel")}
           variant="outlined"
@@ -44,17 +66,22 @@ const Payments = () => {
           onChange={handleAmountChange}
         />
 
-        <AddButton variant="contained" color="primary">
+        <AddButton
+          variant="contained"
+          color="primary"
+          onClick={handleAddPayment}
+        >
           {t("payments.addPaymentButton")}
         </AddButton>
         <ListItemText primary={t("payments.previousPaymentsLabel")} />
         <ListContainer>
-          {payments.map((payment, index) => (
+          {paymentList.map((payment, index) => (
             <ListItem key={index}>
               <ListItemText
                 primary={payment.name}
                 secondary={`$${payment.amount}`}
               />
+              {payment.date}
             </ListItem>
           ))}
         </ListContainer>

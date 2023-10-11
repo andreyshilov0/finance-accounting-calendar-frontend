@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import { EditCategoryDialogProps } from "./types";
-import { Category } from "@components/Settings/types";
+import { ICategory } from "@components/Settings/types";
 import { useTranslation } from "react-i18next";
 
 const EditCategoryDialog = ({
@@ -27,7 +27,7 @@ const EditCategoryDialog = ({
   useEffect(() => {
     setIsCategoryNameUnique(
       !categoryType?.find(
-        (category: Category) =>
+        (category: ICategory) =>
           category.name === inputName && category.name !== initialCategoryName
       )
     );

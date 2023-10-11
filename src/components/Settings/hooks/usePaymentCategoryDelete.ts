@@ -1,5 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { PAYMENT_CATEGORIES } from "./usePaymentCategories";
+import { IUseCategoryMutationDelete } from "../types";
 
 const DELETE_PAYMENT_CATEGORY = gql`
   mutation deletePaymentCategory($categoryId: ID!) {
@@ -10,12 +11,14 @@ const DELETE_PAYMENT_CATEGORY = gql`
 `;
 
 export const usePaymentCategoryDelete = () => {
-  const [deletePaymentCategory, { loading, error, data }] = useMutation(
-    DELETE_PAYMENT_CATEGORY,
-    { refetchQueries: [{ query: PAYMENT_CATEGORIES }] }
-  );
+  const [deletePaymentCategory, { loading, error, data }] =
+    useMutation<IUseCategoryMutationDelete>(DELETE_PAYMENT_CATEGORY, {
+      refetchQueries: [{ query: PAYMENT_CATEGORIES }],
+    });
 
-  const removePaymentCategory = async (categoryId: number) => {
+  const removePaymentCategory = async (
+    categoryId: number
+  ): Promise<boolean> => {
     try {
       const response = await deletePaymentCategory({
         variables: {
@@ -23,10 +26,9 @@ export const usePaymentCategoryDelete = () => {
         },
       });
 
-      return response.data?.deletePaymentCategory.success;
+      return response.data?.removePaymentCategory || false;
     } catch (error) {
       console.error(error);
-
       return false;
     }
   };

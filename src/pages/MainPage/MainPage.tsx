@@ -19,10 +19,10 @@ const MainPage: React.FC = () => {
       <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
         <TabListWrapper>
           <Tab>
-            <TabButton>{t("charts.paymentsTitle")}</TabButton>
+            <TabButton>{t("charts.incomesTitle")}</TabButton>
           </Tab>
           <Tab>
-            <TabButton>{t("charts.incomesTitle")}</TabButton>
+            <TabButton>{t("charts.paymentsTitle")}</TabButton>
           </Tab>
           <Tab>
             <TabButton>{t("charts.chartsTitle")}</TabButton>
@@ -33,10 +33,10 @@ const MainPage: React.FC = () => {
         </TabListWrapper>
         <hr />
         <TabPanel>
-          <Payments />
+          <Incomes />
         </TabPanel>
         <TabPanel>
-          <Incomes />
+          <Payments />
         </TabPanel>
         <TabPanel>
           <Charts />

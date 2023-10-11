@@ -1,4 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
+import { IUseCategoryQuery } from "../types";
 
 export const PAYMENT_CATEGORIES = gql`
   query PaymentCategories {
@@ -10,7 +11,7 @@ export const PAYMENT_CATEGORIES = gql`
 `;
 
 export const usePaymentCategories = () => {
-  const { loading, error, data } = useQuery(PAYMENT_CATEGORIES);
+  const { loading, error, data } = useQuery<IUseCategoryQuery>(PAYMENT_CATEGORIES);
 
   const paymentCategories = data?.paymentCategories;
   return { loading, error, paymentCategories };

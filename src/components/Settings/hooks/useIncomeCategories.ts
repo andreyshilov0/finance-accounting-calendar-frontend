@@ -1,4 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
+import { IUseCategoryQuery } from "../types";
 
 export const INCOME_CATEGORIES = gql`
   query IncomeCategories {
@@ -10,7 +11,7 @@ export const INCOME_CATEGORIES = gql`
 `;
 
 export const useIncomeCategories = () => {
-  const { loading, error, data } = useQuery(INCOME_CATEGORIES);
+  const { loading, error, data } = useQuery<IUseCategoryQuery>(INCOME_CATEGORIES);
 
   const incomeCategories = data?.incomeCategories;
   return { loading, error, incomeCategories };

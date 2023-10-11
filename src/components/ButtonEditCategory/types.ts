@@ -1,4 +1,4 @@
-import { Category } from "@components/Settings/types";
+import { ICategory } from "@components/Settings/types";
 
 export interface EditCategoryDialogProps {
   isOpen: boolean;
@@ -6,5 +6,5 @@ export interface EditCategoryDialogProps {
   onSave: (newCategoryName: string) => void;
   categoryName: string;
   onCategoryNameChange: (name: string) => void;
-  categoryType: Category[]; 
+  categoryType: ICategory[]; 
 }

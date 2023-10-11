@@ -1,16 +1,34 @@
-export interface Category {
+export interface ICategory {
   id: number;
   name: string;
 }
 
-export interface SettingsProps {
-  incomeCategories: Category[];
-  paymentCategories: Category[];
+interface IUseCategoriesResponse {
+  loading: boolean;
+  error?: Error;
 }
 
-export const isCategoryNameUnique = (
-  name: string,
-  categories: Category[]
-): boolean => {
-  return !categories.some((category) => category.name === name);
-};
+export interface IUseCategoryQuery extends IUseCategoriesResponse {
+  incomeCategories: ICategory[];
+  paymentCategories: ICategory[];
+}
+
+export interface IUseCategoryMutationCreate extends IUseCategoriesResponse {
+  addIncomeCategoryByName: string;
+  addPaymentCategoryByName: string;
+}
+
+export interface IUseCategoryMutationDelete extends IUseCategoriesResponse {
+  removeIncomeCategory: boolean;
+  removePaymentCategory: boolean;
+}
+
+export interface IUseCategoryMutationEdit extends IUseCategoriesResponse {
+  updatePaymentCategoryName: {
+    category: ICategory | null;
+  };
+  updateIncomeCategoryName: {
+    category: ICategory | null;
+  };
+}
+

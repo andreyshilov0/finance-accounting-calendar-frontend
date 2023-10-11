@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Container, TextField, Button, Autocomplete } from '@mui/material';
+import { InputLabelProps } from "@mui/material/InputLabel";
 
 export const IncomesContainer = styled(Container)`
   display: flex;
@@ -9,7 +10,7 @@ export const IncomesContainer = styled(Container)`
   padding: 20px;
 `;
 
-export const InputField = styled(TextField)`
+export const InputField = styled(TextField)<{ inputLabelProps?: InputLabelProps }>`
   margin-bottom: 10px;
 `;
 

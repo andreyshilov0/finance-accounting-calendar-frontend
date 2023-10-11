@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { ListItem, ListItemText } from "@mui/material";
 import {
   IncomesContainer,
@@ -8,54 +8,85 @@ import {
   IncomeNameAutocomplete,
 } from "./styles";
 import { useTranslation } from "react-i18next";
-
-const predefinedIncomeNames = ["Income Option 1"]; // Оставил для проверки
-const incomes = [{ name: "Income 1", amount: 100 }];
+import { useIncomeCategories } from "@components/Settings/hooks/useIncomeCategories";
+import { useIncomeList } from "./hooks/useIncomesList";
+import { useCreateIncome } from "./hooks/useIncomeCreate";
 
 const Incomes = () => {
   const [amount, setAmount] = useState("");
-  const [incomeName, setIncomeName] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+
+  const { t } = useTranslation("main-page");
+  const { incomeCategories } = useIncomeCategories();
+  const { incomeList } = useIncomeList();
+  const { addIncome } = useCreateIncome();
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
   };
-  const { t } = useTranslation("main-page");
+
+  const handleCategoryChange = (event: any, value: any) => {
+    setSelectedCategory(value);
+  };
+
+  const handleAddIncome = () => {
+    // Проверяем, что выбрана категория и введена сумма
+    if (selectedCategory && amount) {
+      // Преобразуем строку id в число
+      const categoryId = parseInt(selectedCategory.id, 10);
+      // Вызываем функцию для создания дохода, передавая id, название и введенную сумму
+      addIncome(parseFloat(amount), selectedCategory.name, categoryId);
+      // Очищаем поля после добавления дохода
+
+      setAmount("");
+      setSelectedCategory(null);
+    }
+  };
 
   return (
     <IncomesContainer>
       <ListContainer>
-        {/* <IncomeNameAutocomplete
-          options={predefinedIncomeNames}
-          value={incomeName}
-          onChange={(_, newValue) => setIncomeName(newValue as string)}
+        <IncomeNameAutocomplete
+          options={incomeCategories || []}
+          getOptionLabel={(option) => option.name}
+          value={selectedCategory}
+          onChange={handleCategoryChange}
           renderInput={(params) => (
             <InputField
-              label={t('incomes.incomeNameLabel')}
+              label={t("incomes.incomeNameLabel")}
               variant="outlined"
-              onChange={(e) => setIncomeName(e.target.value)}
+              inputLabelProps={{ children: t("incomes.incomeNameLabel") }}
               {...params}
             />
           )}
-        /> */}
+        />
         <InputField
-          label={t('incomes.amountLabel')}
+          label={t("incomes.amountLabel")}
           variant="outlined"
           fullWidth
           value={amount}
           onChange={handleAmountChange}
         />
 
-        <AddButton variant="contained" color="primary">
-          {t('incomes.addIncomeButton')}
+        <AddButton
+          variant="contained"
+          color="primary"
+          onClick={handleAddIncome}
+        >
+          {t("incomes.addIncomeButton")}
         </AddButton>
-        <ListItemText primary={t('incomes.previousIncomesLabel')} />
+        <ListItemText primary={t("incomes.previousIncomesLabel")} />
         <ListContainer>
-          {incomes.map((income, index) => (
+          {incomeList.map((income, index) => (
             <ListItem key={index}>
               <ListItemText
                 primary={income.name}
                 secondary={`$${income.amount}`}
               />
+              {income.date}
             </ListItem>
           ))}
         </ListContainer>

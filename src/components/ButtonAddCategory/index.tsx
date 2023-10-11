@@ -11,15 +11,11 @@ import {
 import { useTranslation } from "react-i18next";
 import { Add } from "@mui/icons-material";
 import { AddButtonProps } from "./types";
-import { Category } from "@components/Settings/types";
-import { useIncomeCategories } from "@components/Settings/hooks/useIncomeCategories";
-import { usePaymentCategories } from "@components/Settings/hooks/usePaymentCategories";
+import { ICategory } from "@components/Settings/types";
 
-const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
+const AddButton: React.FC<AddButtonProps> = ({ onAdd, categoryType }) => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
-  const { incomeCategories } = useIncomeCategories();
-  const { paymentCategories } = usePaymentCategories();
   const [isNameUnique, setIsNameUnique] = useState(true);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
@@ -43,13 +39,9 @@ const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
     const inputName = e.target.value;
     setNewCategoryName(inputName);
 
-    const isUnique =
-      !incomeCategories.find(
-        (category: Category) => category.name === inputName
-      ) &&
-      !paymentCategories.find(
-        (category: Category) => category.name === inputName
-      );
+    const isUnique = !categoryType.find(
+      (category: ICategory) => category.name === inputName
+    );
 
     setIsNameUnique(isUnique);
     setIsButtonDisabled(!isUnique);

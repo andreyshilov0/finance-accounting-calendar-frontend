@@ -101,6 +101,7 @@ const SettingsIncomeContainer: React.FC = () => {
         onSave={handleSaveEditCategoryIncome}
         categoryName={newCategoryName}
         onCategoryNameChange={setNewCategoryName}
+        categoryType={incomeCategories}
       />
 
       <DeleteCategoryDialog

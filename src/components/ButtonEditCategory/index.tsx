@@ -10,43 +10,35 @@ import {
 import { EditCategoryDialogProps } from "./types";
 import { Category } from "@components/Settings/types";
 import { useTranslation } from "react-i18next";
-import { useIncomeCategories } from "@components/Settings/hooks/useIncomeCategories";
-import { usePaymentCategories } from "@components/Settings/hooks/usePaymentCategories";
 
 const EditCategoryDialog = ({
   isOpen,
   onClose,
   onSave,
   categoryName: initialCategoryName,
+  categoryType,
   onCategoryNameChange,
 }: EditCategoryDialogProps) => {
-  const [isNameUnique, setIsNameUnique] = useState(true);
   const [inputName, setInputName] = useState(initialCategoryName);
-  const { incomeCategories } = useIncomeCategories();
-  const { paymentCategories } = usePaymentCategories();
+  const [isCategoryNameUnique, setIsCategoryNameUnique] = useState(true);
   const { t } = useTranslation("main-page");
+  const isInputEmpty = inputName.trim() === "";
 
   useEffect(() => {
-    setInputName(initialCategoryName);
-  }, [initialCategoryName]);
+    setIsCategoryNameUnique(
+      !categoryType?.find(
+        (category: Category) =>
+          category.name === inputName && category.name !== initialCategoryName
+      )
+    );
+  }, [inputName, categoryType, initialCategoryName]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newName = e.target.value;
-    setInputName(newName);
-
-    const isUnique =
-      !incomeCategories.find(
-        (category: Category) => category.name === newName
-      ) &&
-      !paymentCategories.find(
-        (category: Category) => category.name === newName
-      );
-
-    setIsNameUnique(isUnique);
+    setInputName(e.target.value);
   };
 
   const handleSaveCategory = () => {
-    if (isNameUnique) {
+    if (isCategoryNameUnique && !isInputEmpty) {
       onCategoryNameChange(inputName);
       onSave(inputName);
       onClose();
@@ -63,8 +55,12 @@ const EditCategoryDialog = ({
           fullWidth
           value={inputName}
           onChange={handleInputChange}
-          error={!isNameUnique}
-          helperText={!isNameUnique ? t("addButton.helperText") : ""}
+          error={!isCategoryNameUnique && !isInputEmpty}
+          helperText={
+            !isCategoryNameUnique && !isInputEmpty
+              ? t("addButton.helperText")
+              : ""
+          }
         />
       </DialogContent>
       <DialogActions>
@@ -74,7 +70,7 @@ const EditCategoryDialog = ({
         <Button
           onClick={handleSaveCategory}
           color="primary"
-          disabled={!isNameUnique}
+          disabled={!isCategoryNameUnique || isInputEmpty}
         >
           {t("editCategoryDialog.saveButton")}
         </Button>

@@ -101,6 +101,7 @@ const SettingsPaymentContainer: React.FC = () => {
         }}
         onSave={handleSaveEditCategoryPayment}
         categoryName={newCategoryName}
+        categoryType={paymentCategories}
         onCategoryNameChange={setNewCategoryName}
       />
 

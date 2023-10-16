@@ -26,7 +26,13 @@
     "paymentsTitle": "Payments",
     "chartsTitle": "Charts",
     "settingsTitle": "Settings",
-    "noDataMessage": "No data available for the selected date."
+    "noDataMessage": "No data available for the selected date.",
+    "totalIncome" : "Total Income",
+    "totalPayments": "Total Payments",
+    "balance": "Balance",
+    "deletedCategory": "Deleted Category",
+    "loading": "Loading"
+
   },
   "incomes": {
     "incomeNameLabel": "Income Name",

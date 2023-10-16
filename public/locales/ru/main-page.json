@@ -26,7 +26,12 @@
     "paymentsTitle": "Расходы",
     "chartsTitle": "Графики",
     "settingsTitle": "Настройки",
-    "noDataMessage": "Нет данных для выбранной даты."
+    "noDataMessage": "Нет данных для выбранной даты.",
+    "totalIncome" : "Общий доход",
+    "totalPayments": "Общий расход",
+    "balance": "Баланс",
+    "deletedCategory": "Категория была удалена",
+    "loading": "Loading"
   },
   "incomes": {
     "incomeNameLabel": "Название дохода",

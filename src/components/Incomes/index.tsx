@@ -11,11 +11,12 @@ import { useTranslation } from "react-i18next";
 import { useIncomeCategories } from "@components/Settings/hooks/useIncomeCategories";
 import { useIncomeList } from "./hooks/useIncomesList";
 import { useCreateIncome } from "./hooks/useIncomeCreate";
+import { ICategory } from "@components/Settings/types";
 
 const Incomes = () => {
   const [amount, setAmount] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<{
-    id: string;
+    id: number;
     name: string;
   } | null>(null);
 
@@ -28,32 +29,51 @@ const Incomes = () => {
     setAmount(e.target.value);
   };
 
-  const handleCategoryChange = (event: any, value: any) => {
+  const handleCategoryChange = (
+    event: React.SyntheticEvent,
+    value: ICategory | null
+  ) => {
     setSelectedCategory(value);
+
+    if (value && incomeList.some((income) => income.name === value.name)) {
+      const lastIncome = incomeList.find(
+        (income) => income.name === value.name
+      );
+      if (lastIncome) {
+        setAmount(lastIncome.amount.toString());
+      }
+    } else {
+      setAmount("");
+    }
   };
 
   const handleAddIncome = () => {
-    // Проверяем, что выбрана категория и введена сумма
     if (selectedCategory && amount) {
-      // Преобразуем строку id в число
-      const categoryId = parseInt(selectedCategory.id, 10);
-      // Вызываем функцию для создания дохода, передавая id, название и введенную сумму
-      addIncome(parseFloat(amount), selectedCategory.name, categoryId);
-      // Очищаем поля после добавления дохода
+      const categoryId = selectedCategory.id;
 
+      addIncome(parseFloat(amount), selectedCategory.name, categoryId);
       setAmount("");
       setSelectedCategory(null);
     }
   };
+
+  const sortedIncomeList = [...incomeList].sort((a, b) => {
+    const dateA = new Date(a.date).getTime();
+    const dateB = new Date(b.date).getTime();
+    return dateB - dateA;
+  });
 
   return (
     <IncomesContainer>
       <ListContainer>
         <IncomeNameAutocomplete
           options={incomeCategories || []}
-          getOptionLabel={(option) => option.name}
+          getOptionLabel={(option: any) => option.name}
           value={selectedCategory}
-          onChange={handleCategoryChange}
+          onChange={(event: React.SyntheticEvent, value: unknown) => {
+            const selectedValue = value as ICategory | null;
+            handleCategoryChange(event, selectedValue);
+          }}
           renderInput={(params) => (
             <InputField
               label={t("incomes.incomeNameLabel")}
@@ -80,7 +100,7 @@ const Incomes = () => {
         </AddButton>
         <ListItemText primary={t("incomes.previousIncomesLabel")} />
         <ListContainer>
-          {incomeList.map((income, index) => (
+          {sortedIncomeList.map((income, index) => (
             <ListItem key={index}>
               <ListItemText
                 primary={income.name}

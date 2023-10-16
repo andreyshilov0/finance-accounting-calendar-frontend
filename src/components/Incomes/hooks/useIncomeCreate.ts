@@ -1,5 +1,6 @@
 import { gql, useMutation } from "@apollo/client";
 import { INCOME_LIST } from "./useIncomesList";
+import { IUseIncomeMutationCreate } from "../types";
 
 const CREATE_INCOME = gql`
   mutation createIncome(
@@ -24,24 +25,28 @@ const CREATE_INCOME = gql`
 `;
 
 export const useCreateIncome = () => {
-  const [createIncome, { loading, error, data }] = useMutation(CREATE_INCOME, {
-    refetchQueries: [{ query: INCOME_LIST }],
-  });
+  const [createIncome, { loading, error, data }] =
+    useMutation<IUseIncomeMutationCreate>(CREATE_INCOME, {
+      refetchQueries: [{ query: INCOME_LIST }],
+    });
 
-  const addIncome = (
+  const addIncome = async (
     amount: number,
     name: string,
     incomeCategoryId: number
-  ) => {
-    return createIncome({
-      variables: {
-        amount,
-        name,
-        incomeCategoryId,
-      },
-    }).catch((error) => {
+  ): Promise<void> => {
+    try {
+      await createIncome({
+        variables: {
+          amount,
+          name,
+          incomeCategoryId,
+        },
+      });
+    } catch (error) {
       console.error(error);
-    });
+      throw error;
+    }
   };
 
   return { addIncome, loading, error, data };

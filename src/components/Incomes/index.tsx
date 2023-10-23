@@ -29,31 +29,30 @@ const Incomes = () => {
     setAmount(e.target.value);
   };
 
+  const resetForm = () => {
+    setAmount("");
+    setSelectedCategory(null);
+  };
+
   const handleCategoryChange = (
     event: React.SyntheticEvent,
     value: ICategory | null
   ) => {
     setSelectedCategory(value);
 
-    if (value && incomeList.some((income) => income.name === value.name)) {
-      const lastIncome = incomeList.find(
-        (income) => income.name === value.name
-      );
-      if (lastIncome) {
-        setAmount(lastIncome.amount.toString());
-      }
-    } else {
-      setAmount("");
-    }
+    if (!value) return resetForm();
+
+    const lastIncome = incomeList.find((income) => income.name === value.name);
+
+    if (!lastIncome) return resetForm();
+
+    setAmount(lastIncome.amount.toString());
   };
 
   const handleAddIncome = () => {
     if (selectedCategory && amount) {
-      const categoryId = selectedCategory.id;
-
-      addIncome(parseFloat(amount), selectedCategory.name, categoryId);
-      setAmount("");
-      setSelectedCategory(null);
+      addIncome(parseFloat(amount), selectedCategory.name, selectedCategory.id);
+      resetForm();
     }
   };
 

@@ -1,3 +1,0 @@
-export interface ico {
-
-}

@@ -5,6 +5,9 @@ import { useTranslation } from "react-i18next";
 import { useIncomeList } from "@components/Incomes/hooks/useIncomesList";
 import { usePaymentList } from "@components/Payments/hooks/usePaymentsList";
 import { ChartContainer, ChartSection } from "./style";
+import { ChartItem } from "./types";
+import { IIncome } from "@components/Incomes/types";
+import { IPayment } from "@components/Payments/types";
 
 const Charts = () => {
   const { incomeList } = useIncomeList();
@@ -12,6 +15,7 @@ const Charts = () => {
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().slice(0, 10)
   );
+  const { t } = useTranslation("main-page");
 
   const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(event.target.value);
@@ -29,38 +33,54 @@ const Charts = () => {
     });
   }, [paymentList, selectedDate]);
 
-  const generateIncomeData = () => {
-    const incomeData = filteredIncomeList.map((income) => ({
-      title: income.incomeCategory?.name || t("charts.deletedCategory"),
-      value: income.amount,
-      color: income.incomeCategory ? "#4CAF50" : "#A9A9A9",
-    }));
+  console.log(filteredPaymentList)
 
-    return incomeData.filter((data) => data.value > 0);
+  const generateChartData = (
+    list: ChartItem[],
+    categoryKey: "incomeCategory" | "paymentCategory",
+    defaultColor: string
+  ): {
+    title: string;
+    value: number;
+    color: string;
+  }[] => {
+    return list
+      .map((item) => {
+        const category =
+          categoryKey === "incomeCategory"
+            ? (item as IIncome).incomeCategory
+            : (item as IPayment).paymentCategory;
+
+        const hasCategory = category && category.name;
+
+        return {
+          title: hasCategory ? category.name : t("charts.deletedCategory"),
+          value: item.amount,
+          color: hasCategory ? defaultColor : "#A9A9A9",
+        };
+      })
+      .filter((data) => data.value > 0);
   };
 
-  const generatePaymentData = () => {
-    const paymentData = filteredPaymentList.map((payment) => ({
-      title: payment.paymentCategory?.name || t("charts.deletedCategory"),
-      value: payment.amount,
-      color: payment.paymentCategory ? "#FF0000" : "#A9A9A9",
-    }));
+  const incomeData = generateChartData(
+    filteredIncomeList,
+    "incomeCategory",
+    "#4CAF50"
+  );
+  const paymentData = generateChartData(
+    filteredPaymentList,
+    "paymentCategory",
+    "#FF0000"
+  );
 
-    return paymentData.filter((data) => data.value > 0);
+  const calculateTotal = (list: ChartItem[] = []) => {
+    return list.reduce((total, item) => total + item.amount, 0);
   };
 
-  const totalIncome = (filteredIncomeList || []).reduce(
-    (total, income) => total + income.amount,
-    0
-  );
-  const totalPayments = (filteredPaymentList || []).reduce(
-    (total, payment) => total + payment.amount,
-    0
-  );
+  const totalIncome = calculateTotal(filteredIncomeList);
+  const totalPayments = calculateTotal(filteredPaymentList);
   const balance = totalIncome - totalPayments;
   const isPositiveBalance = balance >= 0;
-
-  const { t } = useTranslation("main-page");
 
   return (
     <Container>
@@ -87,7 +107,7 @@ const Charts = () => {
             {filteredIncomeList && filteredPaymentList ? (
               <>
                 <PieChart
-                  data={generateIncomeData()}
+                  data={incomeData}
                   radius={50}
                   lineWidth={28}
                   label={({ dataEntry }) =>
@@ -112,7 +132,7 @@ const Charts = () => {
             {filteredIncomeList && filteredPaymentList ? (
               <>
                 <PieChart
-                  data={generatePaymentData()}
+                  data={paymentData}
                   radius={50}
                   lineWidth={28}
                   label={({ dataEntry }) =>

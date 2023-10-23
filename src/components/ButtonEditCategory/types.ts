@@ -6,5 +6,5 @@ export interface EditCategoryDialogProps {
   onSave: (newCategoryName: string) => void;
   categoryName: string;
   onCategoryNameChange: (name: string) => void;
-  categoryType: ICategory[]; 
+  categoryTypes: ICategory[]; 
 }

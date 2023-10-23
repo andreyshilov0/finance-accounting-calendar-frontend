@@ -16,7 +16,7 @@ const EditCategoryDialog = ({
   onClose,
   onSave,
   categoryName: initialCategoryName,
-  categoryType,
+  categoryTypes = [],
   onCategoryNameChange,
 }: EditCategoryDialogProps) => {
   const [inputName, setInputName] = useState(initialCategoryName);
@@ -26,12 +26,12 @@ const EditCategoryDialog = ({
 
   useEffect(() => {
     setIsCategoryNameUnique(
-      !categoryType?.find(
+      !categoryTypes.find(
         (category: ICategory) =>
           category.name === inputName && category.name !== initialCategoryName
       )
     );
-  }, [inputName, categoryType, initialCategoryName]);
+  }, [inputName, categoryTypes, initialCategoryName]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputName(e.target.value);

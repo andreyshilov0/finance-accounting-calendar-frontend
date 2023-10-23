@@ -79,7 +79,7 @@ const SettingsIncomeContainer: React.FC = () => {
         </Typography>
         <AddButton
           onAdd={handleAddIncomeCategory}
-          categoryType={incomeCategories || []}
+          categoryTypes={incomeCategories || []}
         />
       </SectionHeader>
       <CategoryList>
@@ -102,7 +102,7 @@ const SettingsIncomeContainer: React.FC = () => {
         onSave={handleSaveEditCategoryIncome}
         categoryName={newCategoryName}
         onCategoryNameChange={setNewCategoryName}
-        categoryType={incomeCategories || []}
+        categoryTypes={incomeCategories || []}
       />
 
       <DeleteCategoryDialog

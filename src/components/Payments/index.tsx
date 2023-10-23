@@ -28,32 +28,35 @@ const Payments = () => {
     setAmount(e.target.value);
   };
 
+  const resetForm = () => {
+    setAmount("");
+    setSelectedCategory(null);
+  };
   const handleCategoryChange = (
     event: React.SyntheticEvent,
     value: ICategory | null
   ) => {
     setSelectedCategory(value);
 
-    if (value && paymentList.some((payment) => payment.name === value.name)) {
-      const lastPayment = paymentList.find(
-        (payment) => payment.name === value.name
-      );
-      if (lastPayment) {
-        setAmount(lastPayment.amount.toString());
-      }
-    } else {
-      setAmount("");
-    }
+    if (!value) return resetForm();
+
+    const lastPayment = paymentList.find(
+      (payment) => payment.name === value.name
+    );
+
+    if (!lastPayment) return resetForm();
+
+    setAmount(lastPayment.amount.toString());
   };
 
   const handleAddPayment = () => {
     if (selectedCategory && amount) {
-      const categoryId = selectedCategory.id;
-
-      addPayment(parseFloat(amount), selectedCategory.name, categoryId);
-
-      setAmount("");
-      setSelectedCategory(null);
+      addPayment(
+        parseFloat(amount),
+        selectedCategory.name,
+        selectedCategory.id
+      );
+      resetForm();
     }
   };
 

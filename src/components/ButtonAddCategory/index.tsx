@@ -13,7 +13,7 @@ import { Add } from "@mui/icons-material";
 import { AddButtonProps } from "./types";
 import { ICategory } from "@components/Settings/types";
 
-const AddButton: React.FC<AddButtonProps> = ({ onAdd, categoryType }) => {
+const AddButton: React.FC<AddButtonProps> = ({ onAdd, categoryTypes }) => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [isNameUnique, setIsNameUnique] = useState(true);
@@ -39,7 +39,7 @@ const AddButton: React.FC<AddButtonProps> = ({ onAdd, categoryType }) => {
     const inputName = e.target.value;
     setNewCategoryName(inputName);
 
-    const isUnique = !categoryType.find(
+    const isUnique = !categoryTypes.find(
       (category: ICategory) => category.name === inputName
     );
 

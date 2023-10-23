@@ -80,7 +80,7 @@ const SettingsPaymentContainer: React.FC = () => {
         </Typography>
         <AddButton
           onAdd={handleAddPaymentCategory}
-          categoryType={paymentCategories || []}
+          categoryTypes={paymentCategories || []}
         />
       </SectionHeader>
       <CategoryList>
@@ -102,7 +102,7 @@ const SettingsPaymentContainer: React.FC = () => {
         }}
         onSave={handleSaveEditCategoryPayment}
         categoryName={newCategoryName}
-        categoryType={paymentCategories || []}
+        categoryTypes={paymentCategories || []}
         onCategoryNameChange={setNewCategoryName}
       />
 

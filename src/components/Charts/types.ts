@@ -1,4 +1,3 @@
-import { IIncome } from "@components/Incomes/types";
-import { IPayment } from "@components/Payments/types";
+import { IPayment, IIncome } from "@components/Financials/types";
 
 export type ChartItem = IIncome | IPayment;

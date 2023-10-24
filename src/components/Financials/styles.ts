@@ -1,8 +1,8 @@
-import styled from '@emotion/styled';
-import { Container, TextField, Button, Autocomplete } from '@mui/material';
+import styled from "@emotion/styled";
+import { Container, TextField, Button, Autocomplete } from "@mui/material";
 import { InputLabelProps } from "@mui/material/InputLabel";
 
-export const IncomesContainer = styled(Container)`
+export const FinancialsContainer = styled(Container)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -10,7 +10,9 @@ export const IncomesContainer = styled(Container)`
   padding: 20px;
 `;
 
-export const InputField = styled(TextField)<{ inputLabelProps?: InputLabelProps }>`
+export const InputField = styled(TextField)<{
+  inputLabelProps?: InputLabelProps;
+}>`
   margin-bottom: 10px;
 `;
 
@@ -23,6 +25,6 @@ export const AddButton = styled(Button)`
   margin-top: 10px;
 `;
 
-export const IncomeNameAutocomplete = styled(Autocomplete)`
+export const NameAutocomplete = styled(Autocomplete)`
   width: 100%;
 `;

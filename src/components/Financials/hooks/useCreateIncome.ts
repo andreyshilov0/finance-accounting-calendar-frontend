@@ -1,5 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
-import { INCOME_LIST } from "./useIncomesList";
+import { INCOME_LIST } from "./useIncomeList";
 import { IUseIncomeMutationCreate } from "../types";
 
 const CREATE_INCOME = gql`

@@ -1,29 +1,28 @@
 import React, { useState } from "react";
 import { ListItem, ListItemText } from "@mui/material";
 import {
-  IncomesContainer,
+  FinancialsContainer,
   ListContainer,
   InputField,
   AddButton,
-  IncomeNameAutocomplete,
+  NameAutocomplete,
 } from "./styles";
 import { useTranslation } from "react-i18next";
-import { useIncomeCategories } from "@components/Settings/hooks/useIncomeCategories";
-import { useIncomeList } from "./hooks/useIncomesList";
-import { useCreateIncome } from "./hooks/useIncomeCreate";
 import { ICategory } from "@components/Settings/types";
+import { FinancialsProps } from "./types";
 
-const Incomes = () => {
+const Financials: React.FC<FinancialsProps> = ({
+  categories,
+  list,
+  add,
+  type,
+}) => {
   const [amount, setAmount] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<{
-    id: number;
-    name: string;
-  } | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null
+  );
 
   const { t } = useTranslation("main-page");
-  const { incomeCategories } = useIncomeCategories();
-  const { incomeList } = useIncomeList();
-  const { addIncome } = useCreateIncome();
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
@@ -42,31 +41,30 @@ const Incomes = () => {
 
     if (!value) return resetForm();
 
-    const lastIncome = incomeList.find((income) => income.name === value.name);
+    const lastEntry = list.find((item) => item.name === value.name);
+    if (!lastEntry) return resetForm();
 
-    if (!lastIncome) return resetForm();
-
-    setAmount(lastIncome.amount.toString());
+    setAmount(lastEntry.amount.toString());
   };
 
-  const handleAddIncome = () => {
+  const handleAdd = () => {
     if (selectedCategory && amount) {
-      addIncome(parseFloat(amount), selectedCategory.name, selectedCategory.id);
+      add(parseFloat(amount), selectedCategory.name, selectedCategory.id);
       resetForm();
     }
   };
 
-  const sortedIncomeList = [...incomeList].sort((a, b) => {
+  const sortedList = [...list].sort((a, b) => {
     const dateA = new Date(a.date).getTime();
     const dateB = new Date(b.date).getTime();
     return dateB - dateA;
   });
 
   return (
-    <IncomesContainer>
+    <FinancialsContainer>
       <ListContainer>
-        <IncomeNameAutocomplete
-          options={incomeCategories || []}
+        <NameAutocomplete
+          options={categories || []}
           getOptionLabel={(option: any) => option.name}
           value={selectedCategory}
           onChange={(event: React.SyntheticEvent, value: unknown) => {
@@ -75,43 +73,43 @@ const Incomes = () => {
           }}
           renderInput={(params) => (
             <InputField
-              label={t("incomes.incomeNameLabel")}
+              label={t(`${type}.${type}NameLabel`)}
               variant="outlined"
-              inputLabelProps={{ children: t("incomes.incomeNameLabel") }}
               {...params}
             />
           )}
         />
         <InputField
-          label={t("incomes.amountLabel")}
+          label={t(`${type}.amountLabel`)}
           variant="outlined"
           fullWidth
           value={amount}
           onChange={handleAmountChange}
         />
 
-        <AddButton
-          variant="contained"
-          color="primary"
-          onClick={handleAddIncome}
-        >
-          {t("incomes.addIncomeButton")}
+        <AddButton variant="contained" color="primary" onClick={handleAdd}>
+          {t(
+            `${type}.add${type.charAt(0).toUpperCase() + type.slice(1)}Button`
+          )}
         </AddButton>
-        <ListItemText primary={t("incomes.previousIncomesLabel")} />
+        <ListItemText
+          primary={t(
+            `${type}.previous${
+              type.charAt(0).toUpperCase() + type.slice(1)
+            }Label`
+          )}
+        />
         <ListContainer>
-          {sortedIncomeList.map((income, index) => (
+          {sortedList.map((item, index) => (
             <ListItem key={index}>
-              <ListItemText
-                primary={income.name}
-                secondary={`$${income.amount}`}
-              />
-              {income.date}
+              <ListItemText primary={item.name} secondary={`$${item.amount}`} />
+              {item.date}
             </ListItem>
           ))}
         </ListContainer>
       </ListContainer>
-    </IncomesContainer>
+    </FinancialsContainer>
   );
 };
 
-export default Incomes;
+export default Financials;

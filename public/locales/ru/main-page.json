@@ -27,22 +27,22 @@
     "chartsTitle": "Графики",
     "settingsTitle": "Настройки",
     "noDataMessage": "Нет данных для выбранной даты.",
-    "totalIncome" : "Общий доход",
+    "totalIncome": "Общий доход",
     "totalPayments": "Общий расход",
     "balance": "Баланс",
     "deletedCategory": "Категория была удалена",
     "loading": "Loading"
   },
   "incomes": {
-    "incomeNameLabel": "Название дохода",
+    "incomesNameLabel": "Название дохода",
     "amountLabel": "Сумма",
-    "addIncomeButton": "Добавить доход",
+    "addIncomesButton": "Добавить доход",
     "previousIncomesLabel": "Предыдущие доходы:"
   },
   "payments": {
-    "paymentNameLabel": "Название расхода",
+    "paymentsNameLabel": "Название расхода",
     "amountLabel": "Сумма",
-    "addPaymentButton": "Добавить расход",
+    "addPaymentsButton": "Добавить расход",
     "previousPaymentsLabel": "Предыдущие расходы:"
   },
   "settings": {

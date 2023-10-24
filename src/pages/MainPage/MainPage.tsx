@@ -1,18 +1,34 @@
 import React, { useState } from "react";
 import { Tab, TabPanel, Tabs } from "react-tabs";
-import Payments from "@components/Payments";
-import Incomes from "@components/Incomes";
 import Charts from "@components/Charts";
 import Settings from "@components/Settings";
 import { MainPageContainer, TabButton, TabListWrapper } from "./styles";
 import { useTranslation } from "react-i18next";
+import {
+  useCreateIncome,
+  useCreatePayment,
+  useIncomeList,
+  usePaymentList,
+} from "@components/Financials/hooks";
+import {
+  usePaymentCategories,
+  useIncomeCategories,
+} from "@components/Settings/hooks";
+import Financials from "@components/Financials";
 
 const MainPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const { paymentCategories } = usePaymentCategories();
+  const { paymentList } = usePaymentList();
+  const { addPayment } = useCreatePayment();
+  const { incomeCategories } = useIncomeCategories();
+  const { incomeList } = useIncomeList();
+  const { addIncome } = useCreateIncome();
 
   const handleTabChange = (index: number) => {
     setActiveTab(index);
   };
+
   const { t } = useTranslation("main-page");
   return (
     <MainPageContainer>
@@ -33,10 +49,20 @@ const MainPage: React.FC = () => {
         </TabListWrapper>
         <hr />
         <TabPanel>
-          <Incomes />
+          <Financials
+            categories={incomeCategories ?? []}
+            list={incomeList}
+            add={addIncome}
+            type="incomes"
+          />
         </TabPanel>
         <TabPanel>
-          <Payments />
+          <Financials
+            categories={paymentCategories ?? []}
+            list={paymentList}
+            add={addPayment}
+            type="payments"
+          />
         </TabPanel>
         <TabPanel>
           <Charts />

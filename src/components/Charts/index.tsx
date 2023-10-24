@@ -2,12 +2,13 @@ import { useState, ChangeEvent, useMemo } from "react";
 import { Container, TextField, Grid, Typography } from "@mui/material";
 import { PieChart } from "react-minimal-pie-chart";
 import { useTranslation } from "react-i18next";
-import { useIncomeList } from "@components/Incomes/hooks/useIncomesList";
-import { usePaymentList } from "@components/Payments/hooks/usePaymentsList";
+
+import { usePaymentList, useIncomeList } from "@components/Financials/hooks";
 import { ChartContainer, ChartSection } from "./style";
 import { ChartItem } from "./types";
-import { IIncome } from "@components/Incomes/types";
-import { IPayment } from "@components/Payments/types";
+import { IIncome, IPayment } from "@components/Financials/types"
+
+
 
 const Charts = () => {
   const { incomeList } = useIncomeList();
@@ -32,8 +33,6 @@ const Charts = () => {
       return payment.date.slice(0, 7) === selectedDate.slice(0, 7);
     });
   }, [paymentList, selectedDate]);
-
-  console.log(filteredPaymentList)
 
   const generateChartData = (
     list: ChartItem[],

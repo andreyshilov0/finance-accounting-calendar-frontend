@@ -11,35 +11,39 @@ import { EditCategoryDialogProps } from "./types";
 import { ICategory } from "@components/Settings/types";
 import { useTranslation } from "react-i18next";
 
-const EditCategoryDialog = ({
+const EditCategoryDialog: React.FC<EditCategoryDialogProps> = ({
   isOpen,
   onClose,
   onSave,
   categoryName: initialCategoryName,
   categoryTypes = [],
   onCategoryNameChange,
-}: EditCategoryDialogProps) => {
-  const [inputName, setInputName] = useState(initialCategoryName);
-  const [isCategoryNameUnique, setIsCategoryNameUnique] = useState(true);
+}) => {
+  const [inputName, setInputName] = useState<string>(initialCategoryName);
+  const [isCategoryNameUnique, setIsCategoryNameUnique] =
+    useState<boolean>(true);
   const { t } = useTranslation("main-page");
-  const isInputEmpty = inputName.trim() === "";
+
+  const isInputEmpty: boolean = inputName.trim() === "";
 
   useEffect(() => {
-    setIsCategoryNameUnique(
-      !categoryTypes.find(
-        (category: ICategory) =>
-          category.name === inputName && category.name !== initialCategoryName
-      )
-    );
-  }, [inputName, categoryTypes, initialCategoryName]);
+    setInputName(initialCategoryName);
+  }, [initialCategoryName]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputName(e.target.value);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const newValue = e.target.value;
+    setInputName(newValue);
+    onCategoryNameChange(newValue);
+
+    const isUnique = !categoryTypes.some(
+      (category: ICategory) =>
+        category.name === newValue && category.name !== initialCategoryName
+    );
+    setIsCategoryNameUnique(isUnique);
   };
 
-  const handleSaveCategory = () => {
+  const handleSaveCategory = (): void => {
     if (isCategoryNameUnique && !isInputEmpty) {
-      onCategoryNameChange(inputName);
       onSave(inputName);
       onClose();
     }
@@ -50,16 +54,20 @@ const EditCategoryDialog = ({
       <DialogTitle>{t("editCategoryDialog.dialogTitle")}</DialogTitle>
       <DialogContent>
         <TextField
+          autoFocus
+          margin="dense"
           label={t("addButton.categoryNameLabel")}
-          variant="outlined"
+          type="text"
           fullWidth
           value={inputName}
           onChange={handleInputChange}
-          error={!isCategoryNameUnique && !isInputEmpty}
+          error={!isCategoryNameUnique || isInputEmpty}
           helperText={
-            !isCategoryNameUnique && !isInputEmpty
+            !isCategoryNameUnique
               ? t("addButton.helperText")
-              : ""
+              : isInputEmpty
+              ? t("editCategoryDialog.inputIsEmpty")
+              : null
           }
         />
       </DialogContent>
@@ -67,11 +75,7 @@ const EditCategoryDialog = ({
         <Button onClick={onClose} color="primary">
           {t("editCategoryDialog.cancelButton")}
         </Button>
-        <Button
-          onClick={handleSaveCategory}
-          color="primary"
-          disabled={!isCategoryNameUnique || isInputEmpty}
-        >
+        <Button onClick={handleSaveCategory} color="primary">
           {t("editCategoryDialog.saveButton")}
         </Button>
       </DialogActions>

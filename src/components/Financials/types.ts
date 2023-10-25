@@ -65,8 +65,10 @@ export interface IUsePaymentMutationCreate extends IUsePaymentResponse {
 }
 
 export interface FinancialsProps {
-  categories: ICategory[];
-  list: IIncome[] | IPayment[];
-  add: (amount: number, name: string, id: number) => void;
-  type: "incomes" | "payments";
+  financialsCategories: ICategory[];
+  financialsList: IIncome[] | IPayment[];
+  financialsAdd: (amount: number, name: string, id: number) => void;
+  financialsType: "incomes" | "payments";
+  currentPage: number;
+  setPage: (page: number) => void;
 }

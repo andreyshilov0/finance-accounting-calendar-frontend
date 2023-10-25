@@ -17,12 +17,25 @@ import {
 import Financials from "@components/Financials";
 
 const MainPage: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState<string>(
+    new Date().toISOString().slice(0, 10)
+  );
+  const slicedDate = selectedDate.slice(0, 7);
+  const [incomePage, setIncomePage] = useState(1);
+  const [paymentPage, setPaymentPage] = useState(1);
   const [activeTab, setActiveTab] = useState(0);
   const { paymentCategories } = usePaymentCategories();
-  const { paymentList } = usePaymentList();
+  const { paymentList } = usePaymentList({
+    page: paymentPage,
+    monthYear: slicedDate ? slicedDate : undefined,
+  });
+
   const { addPayment } = useCreatePayment();
   const { incomeCategories } = useIncomeCategories();
-  const { incomeList } = useIncomeList();
+  const { incomeList } = useIncomeList({
+    page: incomePage,
+    monthYear: slicedDate ? slicedDate : undefined,
+  });
   const { addIncome } = useCreateIncome();
 
   const handleTabChange = (index: number) => {
@@ -50,18 +63,22 @@ const MainPage: React.FC = () => {
         <hr />
         <TabPanel>
           <Financials
-            categories={incomeCategories ?? []}
-            list={incomeList}
-            add={addIncome}
-            type="incomes"
+            financialsCategories={incomeCategories ?? []}
+            financialsList={incomeList}
+            financialsAdd={addIncome}
+            financialsType="incomes"
+            currentPage={incomePage}
+            setPage={setIncomePage}
           />
         </TabPanel>
         <TabPanel>
           <Financials
-            categories={paymentCategories ?? []}
-            list={paymentList}
-            add={addPayment}
-            type="payments"
+            financialsCategories={paymentCategories ?? []}
+            financialsList={paymentList}
+            financialsAdd={addPayment}
+            financialsType="payments"
+            currentPage={paymentPage}
+            setPage={setPaymentPage}
           />
         </TabPanel>
         <TabPanel>

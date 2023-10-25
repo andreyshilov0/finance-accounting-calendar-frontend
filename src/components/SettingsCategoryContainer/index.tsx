@@ -58,6 +58,7 @@ const SettingsCategoryContainer: React.FC<PropsCategoryContainer> = ({
   const handleSaveEditCategory = async () => {
     if (selectedCategory && newCategoryName) {
       await editCategoryName(selectedCategory.id, newCategoryName);
+      setNewCategoryName("");
       setIsModalOpen(false);
     }
   };
@@ -85,7 +86,7 @@ const SettingsCategoryContainer: React.FC<PropsCategoryContainer> = ({
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveEditCategory}
-        categoryName={newCategoryName}
+        categoryName={newCategoryName || ""}
         categoryTypes={categories || []}
         onCategoryNameChange={setNewCategoryName}
       />

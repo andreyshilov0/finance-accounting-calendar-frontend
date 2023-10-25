@@ -3,19 +3,22 @@ import { ListItem, ListItemText } from "@mui/material";
 import {
   FinancialsContainer,
   ListContainer,
-  InputField,
   AddButton,
   NameAutocomplete,
+  StyledTextField,
 } from "./styles";
 import { useTranslation } from "react-i18next";
 import { ICategory } from "@components/Settings/types";
-import { FinancialsProps } from "./types";
+import { FinancialsProps, IIncome, IPayment } from "./types";
+import { Pagination } from "@mui/material";
 
 const Financials: React.FC<FinancialsProps> = ({
-  categories,
-  list,
-  add,
-  type,
+  financialsCategories,
+  financialsList,
+  financialsAdd,
+  financialsType,
+  currentPage,
+  setPage,
 }) => {
   const [amount, setAmount] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
@@ -24,13 +27,19 @@ const Financials: React.FC<FinancialsProps> = ({
 
   const { t } = useTranslation("main-page");
 
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+  };
+
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(e.target.value);
   };
 
   const resetForm = () => {
     setAmount("");
-    setSelectedCategory(null);
   };
 
   const handleCategoryChange = (
@@ -41,7 +50,10 @@ const Financials: React.FC<FinancialsProps> = ({
 
     if (!value) return resetForm();
 
-    const lastEntry = list.find((item) => item.name === value.name);
+    const lastEntry = (financialsList as (IIncome | IPayment)[]).find(
+      (item: IIncome | IPayment) => item.name === value.name
+    );
+
     if (!lastEntry) return resetForm();
 
     setAmount(lastEntry.amount.toString());
@@ -49,22 +61,20 @@ const Financials: React.FC<FinancialsProps> = ({
 
   const handleAdd = () => {
     if (selectedCategory && amount) {
-      add(parseFloat(amount), selectedCategory.name, selectedCategory.id);
+      financialsAdd(
+        parseFloat(amount),
+        selectedCategory.name,
+        selectedCategory.id
+      );
       resetForm();
     }
   };
-
-  const sortedList = [...list].sort((a, b) => {
-    const dateA = new Date(a.date).getTime();
-    const dateB = new Date(b.date).getTime();
-    return dateB - dateA;
-  });
 
   return (
     <FinancialsContainer>
       <ListContainer>
         <NameAutocomplete
-          options={categories || []}
+          options={financialsCategories || []}
           getOptionLabel={(option: any) => option.name}
           value={selectedCategory}
           onChange={(event: React.SyntheticEvent, value: unknown) => {
@@ -72,15 +82,19 @@ const Financials: React.FC<FinancialsProps> = ({
             handleCategoryChange(event, selectedValue);
           }}
           renderInput={(params) => (
-            <InputField
-              label={t(`${type}.${type}NameLabel`)}
+            <StyledTextField
+              label={
+                t(`${financialsType}.${financialsType}NameLabel`) as string
+              }
               variant="outlined"
+              margin="normal"
               {...params}
             />
           )}
         />
-        <InputField
-          label={t(`${type}.amountLabel`)}
+
+        <StyledTextField
+          label={t(`${financialsType}.amountLabel`)}
           variant="outlined"
           fullWidth
           value={amount}
@@ -89,23 +103,30 @@ const Financials: React.FC<FinancialsProps> = ({
 
         <AddButton variant="contained" color="primary" onClick={handleAdd}>
           {t(
-            `${type}.add${type.charAt(0).toUpperCase() + type.slice(1)}Button`
+            `${financialsType}.add${
+              financialsType.charAt(0).toUpperCase() + financialsType.slice(1)
+            }Button`
           )}
         </AddButton>
         <ListItemText
           primary={t(
-            `${type}.previous${
-              type.charAt(0).toUpperCase() + type.slice(1)
+            `${financialsType}.previous${
+              financialsType.charAt(0).toUpperCase() + financialsType.slice(1)
             }Label`
           )}
         />
         <ListContainer>
-          {sortedList.map((item, index) => (
+          {financialsList.map((item, index) => (
             <ListItem key={index}>
               <ListItemText primary={item.name} secondary={`$${item.amount}`} />
               {item.date}
             </ListItem>
           ))}
+          <Pagination
+            count={10}
+            page={currentPage}
+            onChange={handleChangePage}
+          />
         </ListContainer>
       </ListContainer>
     </FinancialsContainer>

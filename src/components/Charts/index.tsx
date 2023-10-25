@@ -1,57 +1,43 @@
-import { useState, ChangeEvent, useMemo } from "react";
+import { useState, ChangeEvent } from "react";
 import { Container, TextField, Grid, Typography } from "@mui/material";
-import { PieChart } from "react-minimal-pie-chart";
 import { useTranslation } from "react-i18next";
-
 import { usePaymentList, useIncomeList } from "@components/Financials/hooks";
 import { ChartContainer, ChartSection } from "./style";
 import { ChartItem } from "./types";
-import { IIncome, IPayment } from "@components/Financials/types"
-
-
+import { IIncome, IPayment } from "@components/Financials/types";
+import ChartSectionComponent from "@components/ChartSectionComponent";
 
 const Charts = () => {
-  const { incomeList } = useIncomeList();
-  const { paymentList } = usePaymentList();
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().slice(0, 10)
   );
+
+  const slicedDate = selectedDate.slice(0, 7);
+  const { incomeList } = useIncomeList({
+    monthYear: slicedDate ? slicedDate : undefined,
+  });
+  const { paymentList } = usePaymentList({
+    monthYear: slicedDate ? slicedDate : undefined,
+  });
+
   const { t } = useTranslation("main-page");
 
   const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(event.target.value);
   };
 
-  const filteredIncomeList = useMemo(() => {
-    return incomeList?.filter(
-      (income) => income.date.slice(0, 7) === selectedDate.slice(0, 7)
-    );
-  }, [incomeList, selectedDate]);
-
-  const filteredPaymentList = useMemo(() => {
-    return paymentList?.filter((payment) => {
-      return payment.date.slice(0, 7) === selectedDate.slice(0, 7);
-    });
-  }, [paymentList, selectedDate]);
-
   const generateChartData = (
     list: ChartItem[],
     categoryKey: "incomeCategory" | "paymentCategory",
     defaultColor: string
-  ): {
-    title: string;
-    value: number;
-    color: string;
-  }[] => {
+  ) => {
     return list
       .map((item) => {
         const category =
           categoryKey === "incomeCategory"
             ? (item as IIncome).incomeCategory
             : (item as IPayment).paymentCategory;
-
         const hasCategory = category && category.name;
-
         return {
           title: hasCategory ? category.name : t("charts.deletedCategory"),
           value: item.amount,
@@ -61,13 +47,9 @@ const Charts = () => {
       .filter((data) => data.value > 0);
   };
 
-  const incomeData = generateChartData(
-    filteredIncomeList,
-    "incomeCategory",
-    "#4CAF50"
-  );
+  const incomeData = generateChartData(incomeList, "incomeCategory", "#4CAF50");
   const paymentData = generateChartData(
-    filteredPaymentList,
+    paymentList,
     "paymentCategory",
     "#FF0000"
   );
@@ -76,8 +58,8 @@ const Charts = () => {
     return list.reduce((total, item) => total + item.amount, 0);
   };
 
-  const totalIncome = calculateTotal(filteredIncomeList);
-  const totalPayments = calculateTotal(filteredPaymentList);
+  const totalIncome = calculateTotal(incomeList);
+  const totalPayments = calculateTotal(paymentList);
   const balance = totalIncome - totalPayments;
   const isPositiveBalance = balance >= 0;
 
@@ -100,57 +82,27 @@ const Charts = () => {
 
         <ChartContainer>
           <ChartSection>
-            <Typography variant="h6" gutterBottom>
-              {t("charts.incomesTitle")}
-            </Typography>
-            {filteredIncomeList && filteredPaymentList ? (
-              <>
-                <PieChart
-                  data={incomeData}
-                  radius={50}
-                  lineWidth={28}
-                  label={({ dataEntry }) =>
-                    `${Math.round(dataEntry.percentage)}%`
-                  }
-                  labelStyle={{ fontSize: "4px" }}
-                  animate
-                />
-                <Typography>
-                  {t("charts.totalIncome")}: {totalIncome}
-                </Typography>
-              </>
-            ) : (
-              <Typography>{t("charts.loading")}...</Typography>
-            )}
+            <ChartSectionComponent
+              titleLocalesKey="charts.incomesTitle"
+              data={incomeData}
+              total={totalIncome}
+              totalLocalesKey="charts.totalIncome"
+              noDataMessageKey="charts.noDataMessage"
+            />
           </ChartSection>
 
           <ChartSection>
-            <Typography variant="h6" gutterBottom>
-              {t("charts.paymentsTitle")}
+            <ChartSectionComponent
+              titleLocalesKey="charts.paymentsTitle"
+              data={paymentData}
+              total={totalPayments}
+              totalLocalesKey="charts.totalPayments"
+              noDataMessageKey="charts.noDataMessage"
+            />
+            <Typography>
+              {t("charts.balance")}: {isPositiveBalance ? "+" : "-"}$
+              {Math.abs(balance)}
             </Typography>
-            {filteredIncomeList && filteredPaymentList ? (
-              <>
-                <PieChart
-                  data={paymentData}
-                  radius={50}
-                  lineWidth={28}
-                  label={({ dataEntry }) =>
-                    `${Math.round(dataEntry.percentage)}%`
-                  }
-                  labelStyle={{ fontSize: "4px" }}
-                  animate
-                />
-                <Typography>
-                  {t("charts.totalPayments")}: {totalPayments}
-                </Typography>
-                <Typography>
-                  {t("charts.balance")}: {isPositiveBalance ? "+" : "-"}$
-                  {Math.abs(balance)}
-                </Typography>
-              </>
-            ) : (
-              <Typography>{t("charts.loading")}...</Typography>
-            )}
           </ChartSection>
         </ChartContainer>
       </Grid>

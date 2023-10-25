@@ -18,7 +18,8 @@
     "dialogTitle": "Edit Category",
     "categoryNameLabel": "Category Name",
     "cancelButton": "Cancel",
-    "saveButton": "Save"
+    "saveButton": "Save",
+    "inputIsEmpty": "Input is not be empty"
   },
   "charts": {
     "selectDateLabel": "Select Date",

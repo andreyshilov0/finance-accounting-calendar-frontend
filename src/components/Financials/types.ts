@@ -1,19 +1,29 @@
 import { ICategory } from "@components/Settings/types";
 
-export interface IIncome {
+export interface IFinancial {
   name: string;
   amount: number;
   date: string;
-  incomeCategory: {
-    id: number;
-    name: string;
-  };
+  category: ICategory;
 }
+
+export interface IIncome extends IFinancial {
+  incomeCategory: ICategory;
+}
+
+export interface IPayment extends IFinancial {
+  paymentCategory: ICategory;
+}
+
+export interface IIncomeCategory extends ICategory {}
+export interface IPaymentCategory extends ICategory {}
 
 export interface IncomesProps {
   predefinedIncomeNames: string[];
   incomes: IIncome[];
 }
+
+export type CategoryKey = "incomeCategory" | "paymentCategory";
 
 interface IUseIncomeResponse {
   loading: boolean;
@@ -30,16 +40,6 @@ export interface IUseIncomeMutationCreate extends IUseIncomeResponse {
     name: string,
     incomeCategoryId: number
   ) => Promise<void>;
-}
-
-export interface IPayment {
-  name: string;
-  amount: number;
-  date: string;
-  paymentCategory: {
-    id: number;
-    name: string;
-  };
 }
 
 export interface PaymentsProps {

@@ -1,66 +1,25 @@
-import { useState, ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import { Container, TextField, Grid, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { usePaymentList, useIncomeList } from "@components/Financials/hooks";
 import { ChartContainer, ChartSection } from "./style";
-import { ChartItem } from "./types";
-import { IIncome, IPayment } from "@components/Financials/types";
+import { ChartsProps } from "./types";
 import ChartSectionComponent from "@components/ChartSectionComponent";
 
-const Charts = () => {
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().slice(0, 10)
-  );
-
-  const slicedDate = selectedDate.slice(0, 7);
-  const { incomeList } = useIncomeList({
-    monthYear: slicedDate ? slicedDate : undefined,
-  });
-  const { paymentList } = usePaymentList({
-    monthYear: slicedDate ? slicedDate : undefined,
-  });
-
+const Charts: React.FC<ChartsProps> = ({
+  totalIncome,
+  totalPayment,
+  onDateChange,
+  selectedDate,
+  incomeData,
+  paymentData,
+}) => {
+  const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newDate = event.target.value;
+    onDateChange(newDate);
+  };
   const { t } = useTranslation("main-page");
 
-  const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedDate(event.target.value);
-  };
-
-  const generateChartData = (
-    list: ChartItem[],
-    categoryKey: "incomeCategory" | "paymentCategory",
-    defaultColor: string
-  ) => {
-    return list
-      .map((item) => {
-        const category =
-          categoryKey === "incomeCategory"
-            ? (item as IIncome).incomeCategory
-            : (item as IPayment).paymentCategory;
-        const hasCategory = category && category.name;
-        return {
-          title: hasCategory ? category.name : t("charts.deletedCategory"),
-          value: item.amount,
-          color: hasCategory ? defaultColor : "#A9A9A9",
-        };
-      })
-      .filter((data) => data.value > 0);
-  };
-
-  const incomeData = generateChartData(incomeList, "incomeCategory", "#4CAF50");
-  const paymentData = generateChartData(
-    paymentList,
-    "paymentCategory",
-    "#FF0000"
-  );
-
-  const calculateTotal = (list: ChartItem[] = []) => {
-    return list.reduce((total, item) => total + item.amount, 0);
-  };
-
-  const totalIncome = calculateTotal(incomeList);
-  const totalPayments = calculateTotal(paymentList);
-  const balance = totalIncome - totalPayments;
+  const balance = totalIncome - totalPayment;
   const isPositiveBalance = balance >= 0;
 
   return (
@@ -95,7 +54,7 @@ const Charts = () => {
             <ChartSectionComponent
               titleLocalesKey="charts.paymentsTitle"
               data={paymentData}
-              total={totalPayments}
+              total={totalPayment}
               totalLocalesKey="charts.totalPayments"
               noDataMessageKey="charts.noDataMessage"
             />

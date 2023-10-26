@@ -15,11 +15,14 @@ import {
   useIncomeCategories,
 } from "@components/Settings/hooks";
 import Financials from "@components/Financials";
+import { ChartItem } from "@components/Charts/types";
+import { CategoryKey, IIncome, IPayment } from "@components/Financials/types";
 
 const MainPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().slice(0, 10)
   );
+  const { t } = useTranslation("main-page");
   const slicedDate = selectedDate.slice(0, 7);
   const [incomePage, setIncomePage] = useState(1);
   const [paymentPage, setPaymentPage] = useState(1);
@@ -41,8 +44,54 @@ const MainPage: React.FC = () => {
   const handleTabChange = (index: number) => {
     setActiveTab(index);
   };
+  const handleChartsDateChange = (newDate: string) => {
+    setSelectedDate(newDate);
+  };
 
-  const { t } = useTranslation("main-page");
+  const isIncome = (item: ChartItem): item is IIncome =>
+    (item as IIncome).incomeCategory !== undefined;
+
+  const isPayment = (item: ChartItem): item is IPayment =>
+    (item as IPayment).paymentCategory !== undefined;
+
+  const generateChartData = (
+    list: ChartItem[],
+    categoryKey: CategoryKey,
+    defaultColor: string
+  ) => {
+    return list
+      .map((item) => {
+        const category =
+          isIncome(item) && categoryKey === "incomeCategory"
+            ? item.incomeCategory
+            : isPayment(item) && categoryKey === "paymentCategory"
+            ? item.paymentCategory
+            : undefined;
+
+        const hasCategory = category && category.name;
+        return {
+          title: hasCategory || t("charts.deletedCategory"),
+          value: item.amount,
+          color: hasCategory ? defaultColor : "#A9A9A9",
+        };
+      })
+      .filter((data) => data.value > 0);
+  };
+
+  const incomeData = generateChartData(incomeList, "incomeCategory", "#4CAF50");
+  const paymentData = generateChartData(
+    paymentList,
+    "paymentCategory",
+    "#FF0000"
+  );
+
+  const calculateTotal = (list: ChartItem[] = []) => {
+    return list.reduce((total, item) => total + item.amount, 0);
+  };
+
+  const totalIncome = calculateTotal(incomeList);
+  const totalPayments = calculateTotal(paymentList);
+
   return (
     <MainPageContainer>
       <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
@@ -82,7 +131,16 @@ const MainPage: React.FC = () => {
           />
         </TabPanel>
         <TabPanel>
-          <Charts />
+          <Charts
+            incomeList={incomeList}
+            paymentList={paymentList}
+            onDateChange={handleChartsDateChange}
+            selectedDate={selectedDate}
+            totalIncome={totalIncome}
+            totalPayment={totalPayments}
+            incomeData={incomeData}
+            paymentData={paymentData}
+          />
         </TabPanel>
         <TabPanel>
           <Settings />

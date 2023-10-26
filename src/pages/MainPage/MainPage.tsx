@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Tab, TabPanel, Tabs } from "react-tabs";
 import Charts from "@components/Charts";
 import Settings from "@components/Settings";
@@ -10,6 +10,7 @@ import {
   useIncomeList,
   usePaymentList,
 } from "@components/Financials/hooks";
+import { COLORS } from "@constants/constants";
 import {
   usePaymentCategories,
   useIncomeCategories,
@@ -44,9 +45,9 @@ const MainPage: React.FC = () => {
   const handleTabChange = (index: number) => {
     setActiveTab(index);
   };
-  const handleChartsDateChange = (newDate: string) => {
+  const handleChartsDateChange = useCallback((newDate: string) => {
     setSelectedDate(newDate);
-  };
+  }, []);
 
   const isIncome = (item: ChartItem): item is IIncome =>
     (item as IIncome).incomeCategory !== undefined;
@@ -72,17 +73,21 @@ const MainPage: React.FC = () => {
         return {
           title: hasCategory || t("charts.deletedCategory"),
           value: item.amount,
-          color: hasCategory ? defaultColor : "#A9A9A9",
+          color: hasCategory ? defaultColor : COLORS.DELETED_CATEGORY_GRAY,
         };
       })
       .filter((data) => data.value > 0);
   };
 
-  const incomeData = generateChartData(incomeList, "incomeCategory", "#4CAF50");
+  const incomeData = generateChartData(
+    incomeList,
+    "incomeCategory",
+    COLORS.INCOME_GREEN
+  );
   const paymentData = generateChartData(
     paymentList,
     "paymentCategory",
-    "#FF0000"
+    COLORS.PAYMENT_RED
   );
 
   const calculateTotal = (list: ChartItem[] = []) => {
@@ -132,8 +137,6 @@ const MainPage: React.FC = () => {
         </TabPanel>
         <TabPanel>
           <Charts
-            incomeList={incomeList}
-            paymentList={paymentList}
             onDateChange={handleChartsDateChange}
             selectedDate={selectedDate}
             totalIncome={totalIncome}

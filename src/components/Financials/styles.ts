@@ -1,7 +1,7 @@
-import styled from '@emotion/styled';
-import { Container, TextField, Button, Autocomplete } from '@mui/material';
+import styled from "@emotion/styled";
+import { Container, TextField, Button, Autocomplete } from "@mui/material";
 
-export const PaymentsContainer = styled(Container)`
+export const FinancialsContainer = styled(Container)`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,7 +9,7 @@ export const PaymentsContainer = styled(Container)`
   padding: 20px;
 `;
 
-export const InputField = styled(TextField)`
+export const StyledTextField = styled(TextField)`
   margin-bottom: 10px;
 `;
 
@@ -22,6 +22,6 @@ export const AddButton = styled(Button)`
   margin-top: 10px;
 `;
 
-export const PaymentNameAutocomplete = styled(Autocomplete)`
+export const NameAutocomplete = styled(Autocomplete)`
   width: 100%;
 `;

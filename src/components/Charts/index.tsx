@@ -1,32 +1,31 @@
-import { useState, ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import { Container, TextField, Grid, Typography } from "@mui/material";
-import { PieChart } from "react-minimal-pie-chart";
-import { Income, Payment } from "./types";
 import { useTranslation } from "react-i18next";
+import { ChartContainer, ChartSection } from "./style";
+import { ChartsProps } from "./types";
+import ChartSectionComponent from "@components/ChartSectionComponent";
 
-const Charts = () => {
-  const [selectedDate, setSelectedDate] = useState<string>(
-    new Date().toISOString().slice(0, 10)
-  );
-  const [incomesData, setIncomesData] = useState<Income[]>([
-    { title: "Income 1", value: 220, color: "#E38627" }, // Оставил пока для примера
-    { title: "Income 2", value: 150, color: "#C13C37" },
-  ]);
-  const [paymentsData, setPaymentsData] = useState<Payment[]>([
-    { title: "Payment 1", value: 100, color: "#6A2135" },
-    { title: "Payment 2", value: 75, color: "#FF5733" },
-  ]);
-
+const Charts: React.FC<ChartsProps> = ({
+  totalIncome,
+  totalPayment,
+  onDateChange,
+  selectedDate,
+  incomeData,
+  paymentData,
+}) => {
   const handleDateChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedDate(event.target.value);
+    const newDate = event.target.value;
+    onDateChange(newDate);
   };
-
   const { t } = useTranslation("main-page");
+
+  const balance = totalIncome - totalPayment;
+  const isPositiveBalance = balance >= 0;
 
   return (
     <Container>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+      <Grid>
+        <Grid>
           <TextField
             label={t("charts.selectDateLabel")}
             type="date"
@@ -40,45 +39,31 @@ const Charts = () => {
           />
         </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Typography variant="h6" gutterBottom>
-            {t("charts.incomesTitle")}
-          </Typography>
-          {incomesData.length > 0 ? (
-            <PieChart
-              data={incomesData}
-              radius={42}
-              lineWidth={15}
-              label={({ dataEntry }) => `${Math.round(dataEntry.percentage)}%`}
-              labelStyle={{
-                fontSize: "8px",
-              }}
-              animate
+        <ChartContainer>
+          <ChartSection>
+            <ChartSectionComponent
+              titleLocalesKey="charts.incomesTitle"
+              data={incomeData}
+              total={totalIncome}
+              totalLocalesKey="charts.totalIncome"
+              noDataMessageKey="charts.noDataMessage"
             />
-          ) : (
-            <Typography>{t("charts.noDataMessage")}</Typography>
-          )}
-        </Grid>
+          </ChartSection>
 
-        <Grid item xs={12} md={6}>
-          <Typography variant="h6" gutterBottom>
-            {t("charts.paymentsTitle")}
-          </Typography>
-          {paymentsData.length > 0 ? (
-            <PieChart
-              data={paymentsData}
-              radius={42}
-              lineWidth={15}
-              label={({ dataEntry }) => `${Math.round(dataEntry.percentage)}%`}
-              labelStyle={{
-                fontSize: "8px",
-              }}
-              animate
+          <ChartSection>
+            <ChartSectionComponent
+              titleLocalesKey="charts.paymentsTitle"
+              data={paymentData}
+              total={totalPayment}
+              totalLocalesKey="charts.totalPayments"
+              noDataMessageKey="charts.noDataMessage"
             />
-          ) : (
-            <Typography>{t("charts.noDataMessage")}</Typography>
-          )}
-        </Grid>
+            <Typography>
+              {t("charts.balance")}: {isPositiveBalance ? "+" : "-"}$
+              {Math.abs(balance)}
+            </Typography>
+          </ChartSection>
+        </ChartContainer>
       </Grid>
     </Container>
   );

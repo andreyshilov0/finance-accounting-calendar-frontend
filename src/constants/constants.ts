@@ -1,13 +1,7 @@
-import Charts from "@components/Charts";
-import Incomes from "@components/Incomes";
-import Payments from "@components/Payments";
-import Settings from "@components/Settings";
-
-export const TAB_SCREENS = [
-  { label: "Payments", component: Payments },
-  { label: "Income", component: Incomes },
-  { label: "Charts", component: Charts },
-  { label: "Settings", component: Settings },
-];
-
 export const LIST_LANGUAGES = ["en", "ru"];
+
+export const COLORS = {
+  INCOME_GREEN: "#4CAF50",
+  PAYMENT_RED: "#FF0000",
+  DELETED_CATEGORY_GRAY: "#A9A9A9",
+};

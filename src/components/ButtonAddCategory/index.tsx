@@ -11,10 +11,14 @@ import {
 import { useTranslation } from "react-i18next";
 import { Add } from "@mui/icons-material";
 import { AddButtonProps } from "./types";
+import { ICategory } from "@components/Settings/types";
 
-const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
+const AddButton: React.FC<AddButtonProps> = ({ onAdd, categoryTypes }) => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [isNameUnique, setIsNameUnique] = useState(true);
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
   const { t } = useTranslation("main-page");
 
   const handleOpenDialog = () => {
@@ -29,6 +33,18 @@ const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
   const handleSaveCategory = () => {
     onAdd(newCategoryName);
     handleCloseDialog();
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputName = e.target.value;
+    setNewCategoryName(inputName);
+
+    const isUnique = !categoryTypes.find(
+      (category: ICategory) => category.name === inputName
+    );
+
+    setIsNameUnique(isUnique);
+    setIsButtonDisabled(!isUnique);
   };
 
   return (
@@ -46,14 +62,20 @@ const AddButton: React.FC<AddButtonProps> = ({ onAdd }) => {
             variant="outlined"
             fullWidth
             value={newCategoryName}
-            onChange={(e) => setNewCategoryName(e.target.value)}
+            onChange={handleInputChange}
+            error={!isNameUnique}
+            helperText={!isNameUnique ? t("addButton.helperText") : ""}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">
             {t("addButton.cancelButton")}
           </Button>
-          <Button onClick={handleSaveCategory} color="primary">
+          <Button
+            onClick={handleSaveCategory}
+            color="primary"
+            disabled={isButtonDisabled}
+          >
             {t("addButton.saveButton")}
           </Button>
         </DialogActions>

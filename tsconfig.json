@@ -25,7 +25,8 @@
       "@images/*": ["assets/image/*", "assets/image"],
       "@pages/*": ["pages/*"],
       "@store/*":["store/*"],
-      "@utilits/*":["utilits/*"]
+      "@utilits/*":["utilits/*"],
+      "@constants/*":["constants/*"]
     }
   },
   "include": [

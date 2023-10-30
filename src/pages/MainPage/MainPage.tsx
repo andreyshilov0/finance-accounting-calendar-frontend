@@ -61,19 +61,23 @@ const MainPage: React.FC = () => {
     defaultColor: string
   ) => {
     return list
+      .filter((item) => {
+        return (
+          (categoryKey === "incomeCategory" && isIncome(item)) ||
+          (categoryKey === "paymentCategory" && isPayment(item))
+        );
+      })
       .map((item) => {
         const category =
-          isIncome(item) && categoryKey === "incomeCategory"
+          categoryKey === "incomeCategory"
             ? item.incomeCategory
-            : isPayment(item) && categoryKey === "paymentCategory"
-            ? item.paymentCategory
-            : undefined;
+            : item.paymentCategory;
+        const categoryName = category && category.name;
 
-        const hasCategory = category && category.name;
         return {
-          title: hasCategory || t("charts.deletedCategory"),
+          title: categoryName || t("charts.deletedCategory"),
           value: item.amount,
-          color: hasCategory ? defaultColor : COLORS.DELETED_CATEGORY_GRAY,
+          color: categoryName ? defaultColor : COLORS.DELETED_CATEGORY_GRAY,
         };
       })
       .filter((data) => data.value > 0);
